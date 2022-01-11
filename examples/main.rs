@@ -6,11 +6,11 @@ async fn main() {
 
 	match client.level(128).await {
 		Ok(level) => println!("Found level: {} (ID: {})", level.name, level.id),
-		Err(error) => println!("Error: {:?}", error),
+		Err(error) => println!("Error: {}", error),
 	}
 
 	match client.user(71).await {
 		Ok(user) => println!("Found user: {} (ID: {})", user.name, user.id),
-		Err(error) => println!("Error: {:?}", error),
+		Err(error) => println!("Error: {}", error),
 	}
 }
