@@ -12,7 +12,7 @@ impl Client {
 		Self::default()
 	}
 
-	async fn request<'a>(&self, endpoint: &str, form: impl Serialize) -> Result<APIData> {
+	async fn request(&self, endpoint: &str, form: impl Serialize) -> Result<APIData> {
 		let url = format!("{}/{}.php", constants::BASE_URL, endpoint);
 		let response = self.inner.post(url).form(&form).send().await?.text().await?;
 
