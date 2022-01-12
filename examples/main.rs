@@ -13,4 +13,9 @@ async fn main() {
 		Ok(user) => println!("Found user: {} (ID: {})", user.name, user.id),
 		Err(error) => println!("Error: {}", error),
 	}
+
+	match client.search_user("Vaporox").await {
+		Ok(user) => println!("Found user: {} (ID: {})", user.name, user.id),
+		Err(error) => println!("Error: {}", error),
+	}
 }

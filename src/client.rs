@@ -36,4 +36,12 @@ impl Client {
 
 		Ok(User { id, name })
 	}
+
+	pub async fn search_user(&self, name: &str) -> Result<User> {
+		let mut data = self.request("getGJUsers20", form::search_user(name)).await?;
+		let name = data.remove(&1).unwrap();
+		let id = data.remove(&16).unwrap().parse().unwrap();
+
+		Ok(User { id, name })
+	}
 }

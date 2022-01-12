@@ -16,6 +16,19 @@ pub fn level(id: u32) -> LevelForm {
 }
 
 #[derive(Serialize)]
+pub struct SearchUserForm<'a> {
+	str: &'a str,
+	secret: &'static str,
+}
+
+pub fn search_user(name: &str) -> SearchUserForm {
+	SearchUserForm {
+		str: name,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct UserForm {
 	#[serde(rename = "targetAccountID")]
 	target_account_id: u32,
