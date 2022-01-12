@@ -5,13 +5,13 @@ use serde::Serialize;
 pub struct LevelForm {
 	#[serde(rename = "levelID")]
 	level_id: u32,
-	secret: String,
+	secret: &'static str,
 }
 
 pub fn level(id: u32) -> LevelForm {
 	LevelForm {
 		level_id: id,
-		secret: constants::SECRET.into(),
+		secret: constants::SECRET,
 	}
 }
 
@@ -19,12 +19,12 @@ pub fn level(id: u32) -> LevelForm {
 pub struct UserForm {
 	#[serde(rename = "targetAccountID")]
 	target_account_id: u32,
-	secret: String,
+	secret: &'static str,
 }
 
 pub fn user(id: u32) -> UserForm {
 	UserForm {
 		target_account_id: id,
-		secret: constants::SECRET.into(),
+		secret: constants::SECRET,
 	}
 }

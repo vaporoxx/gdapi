@@ -1,10 +1,10 @@
 use crate::{constants, data::*, error::*, form, parser::*};
-use reqwest::Client as BaseClient;
+use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 
 #[derive(Clone, Debug, Default)]
 pub struct Client {
-	inner: BaseClient,
+	inner: ReqwestClient,
 }
 
 impl Client {
