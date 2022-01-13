@@ -31,9 +31,9 @@ impl APIData for User {
 	fn parse_data(data: &str) -> Option<Self> {
 		let mut map = parse_key_value(data)?;
 
-		let name = map.remove(&1)?;
-		let id = map.get(&16)?.parse().ok()?;
+		let account_id = map.get(&16)?.parse().ok()?;
+		let username = map.remove(&1)?;
 
-		Some(Self { id, name })
+		Some(Self { account_id, username })
 	}
 }

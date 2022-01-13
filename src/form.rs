@@ -21,9 +21,9 @@ pub struct SearchUserForm<'a> {
 	secret: &'static str,
 }
 
-pub fn search_user(name: &str) -> SearchUserForm {
+pub fn search_user(username: &str) -> SearchUserForm {
 	SearchUserForm {
-		str: name,
+		str: username,
 		secret: constants::SECRET,
 	}
 }
@@ -35,9 +35,9 @@ pub struct UserForm {
 	secret: &'static str,
 }
 
-pub fn user(id: u32) -> UserForm {
+pub fn user(account_id: u32) -> UserForm {
 	UserForm {
-		target_account_id: id,
+		target_account_id: account_id,
 		secret: constants::SECRET,
 	}
 }

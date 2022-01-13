@@ -10,12 +10,12 @@ async fn main() {
 	}
 
 	match client.user(71).await {
-		Ok(user) => println!("Found user: {} (ID: {})", user.name, user.id),
+		Ok(user) => println!("Found user: {} (Account ID: {})", user.username, user.account_id),
 		Err(error) => println!("Error: {}", error),
 	}
 
 	match client.search_user("Vaporox").await {
-		Ok(user) => println!("Found user: {} (ID: {})", user.name, user.id),
+		Ok(user) => println!("Found user: {} (Account ID: {})", user.username, user.account_id),
 		Err(error) => println!("Error: {}", error),
 	}
 }

@@ -27,11 +27,11 @@ impl Client {
 		self.request("downloadGJLevel22", form::level(id)).await
 	}
 
-	pub async fn user(&self, id: u32) -> Result<User> {
-		self.request("getGJUserInfo20", form::user(id)).await
+	pub async fn user(&self, account_id: u32) -> Result<User> {
+		self.request("getGJUserInfo20", form::user(account_id)).await
 	}
 
-	pub async fn search_user(&self, name: &str) -> Result<User> {
-		self.request("getGJUsers20", form::search_user(name)).await
+	pub async fn search_user(&self, username: &str) -> Result<User> {
+		self.request("getGJUsers20", form::search_user(username)).await
 	}
 }
