@@ -1,4 +1,4 @@
-# GD API
+# gdapi-rs
 
 A wrapper around the Geometry Dash API.
 
