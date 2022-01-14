@@ -27,6 +27,17 @@ impl APIData for Level {
 	}
 }
 
+impl APIData for LoginResponse {
+	fn parse_data(data: &str) -> Option<Self> {
+		let split = data.split_once(',')?;
+
+		let account_id = split.0.parse().ok()?;
+		let user_id = split.1.parse().ok()?;
+
+		Some(Self { account_id, user_id })
+	}
+}
+
 impl APIData for User {
 	fn parse_data(data: &str) -> Option<Self> {
 		let mut map = parse_key_value(data)?;

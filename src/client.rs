@@ -4,7 +4,9 @@ use serde::Serialize;
 
 #[derive(Clone, Debug, Default)]
 pub struct Client {
+	account_id: Option<u32>,
 	inner: ReqwestClient,
+	password: Option<String>,
 }
 
 impl Client {
@@ -25,6 +27,17 @@ impl Client {
 
 	pub async fn level(&self, id: u32) -> Result<Level> {
 		self.request("downloadGJLevel22", form::level(id)).await
+	}
+
+	pub async fn login(&mut self, username: &str, password: &str) -> Result<LoginResponse> {
+		let data: LoginResponse = self
+			.request("accounts/loginGJAccount", form::login(username, password))
+			.await?;
+
+		self.account_id = Some(data.account_id);
+		self.password = Some(password.into());
+
+		Ok(data)
 	}
 
 	pub async fn search_user(&self, username: &str) -> Result<User> {

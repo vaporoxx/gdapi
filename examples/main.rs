@@ -2,10 +2,15 @@ use gdapi::Client;
 
 #[tokio::main]
 async fn main() {
-	let client = Client::new();
+	let mut client = Client::new();
 
 	match client.level(128).await {
 		Ok(level) => println!("Found level: {} (ID: {})", level.name, level.id),
+		Err(error) => println!("Error: {}", error),
+	}
+
+	match client.login("Vaporox", "********").await {
+		Ok(login) => println!("Logged in! (ID: {}, Account ID: {})", login.user_id, login.account_id),
 		Err(error) => println!("Error: {}", error),
 	}
 

@@ -1,5 +1,6 @@
 use crate::constants;
 use serde::Serialize;
+use uuid::Uuid;
 
 #[derive(Serialize)]
 pub struct LevelForm {
@@ -12,6 +13,24 @@ pub fn level(id: u32) -> LevelForm {
 	LevelForm {
 		level_id: id,
 		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
+pub struct LoginForm<'a> {
+	#[serde(rename = "userName")]
+	username: &'a str,
+	password: &'a str,
+	udid: Uuid,
+	secret: &'static str,
+}
+
+pub fn login<'a>(username: &'a str, password: &'a str) -> LoginForm<'a> {
+	LoginForm {
+		username,
+		password,
+		udid: Uuid::new_v4(),
+		secret: constants::LOGIN_SECRET,
 	}
 }
 
