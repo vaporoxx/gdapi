@@ -38,6 +38,17 @@ impl APIData for LoginResponse {
 	}
 }
 
+impl APIData for MapPack {
+	fn parse_data(data: &str) -> Option<Self> {
+		let mut map = parse_key_value(data)?;
+
+		let id = map.get(&1)?.parse().ok()?;
+		let name = map.remove(&2)?;
+
+		Some(Self { id, name })
+	}
+}
+
 impl APIData for User {
 	fn parse_data(data: &str) -> Option<Self> {
 		let mut map = parse_key_value(data)?;
@@ -46,5 +57,11 @@ impl APIData for User {
 		let username = map.remove(&1)?;
 
 		Some(Self { account_id, username })
+	}
+}
+
+impl<T: APIData> APIData for Vec<T> {
+	fn parse_data(data: &str) -> Option<Self> {
+		Some(data.split_once('#')?.0.split('|').filter_map(T::parse_data).collect())
 	}
 }

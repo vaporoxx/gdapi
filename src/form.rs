@@ -35,6 +35,19 @@ pub fn login<'a>(username: &'a str, password: &'a str) -> LoginForm<'a> {
 }
 
 #[derive(Serialize)]
+pub struct MapPacksForm {
+	page: Option<u8>,
+	secret: &'static str,
+}
+
+pub fn map_packs(page: Option<u8>) -> MapPacksForm {
+	MapPacksForm {
+		page,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct SearchUserForm<'a> {
 	str: &'a str,
 	secret: &'static str,

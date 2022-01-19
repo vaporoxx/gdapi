@@ -1,4 +1,4 @@
-use crate::{constants, data::*, error::*, form, parser::*};
+use crate::{builders::*, constants, data::*, error::*, form, parser::*};
 use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 
@@ -14,7 +14,7 @@ impl Client {
 		Self::default()
 	}
 
-	async fn request<T: APIData>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
+	pub(crate) async fn request<T: APIData>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
 		let url = format!("{}/{}.php", constants::BASE_URL, endpoint);
 		let response = self.inner.post(url).form(&form).send().await?.text().await?;
 
@@ -38,6 +38,10 @@ impl Client {
 		self.password = Some(password.into());
 
 		Ok(data)
+	}
+
+	pub fn map_packs(&self) -> MapPacksBuilder {
+		MapPacksBuilder::new(self)
 	}
 
 	pub async fn search_user(&self, username: &str) -> Result<User> {
