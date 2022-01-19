@@ -16,6 +16,21 @@ pub trait APIData: Sized {
 	fn parse_data(data: &str) -> Option<Self>;
 }
 
+impl APIData for Gauntlet {
+	fn parse_data(data: &str) -> Option<Self> {
+		let map = parse_key_value(data)?;
+
+		let id = map.get(&1)?.parse().ok()?;
+		let mut level_ids = [0; 5];
+
+		for (i, level_id) in map.get(&3)?.split(',').enumerate() {
+			level_ids[i] = level_id.parse().ok()?;
+		}
+
+		Some(Self { id, level_ids })
+	}
+}
+
 impl APIData for Level {
 	fn parse_data(data: &str) -> Option<Self> {
 		let mut map = parse_key_value(data)?;

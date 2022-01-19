@@ -25,6 +25,10 @@ impl Client {
 		}
 	}
 
+	pub async fn gauntlets(&self) -> Result<Vec<Gauntlet>> {
+		self.request("getGJGauntlets21", form::gauntlets()).await
+	}
+
 	pub async fn level(&self, id: u32) -> Result<Level> {
 		self.request("downloadGJLevel22", form::level(id)).await
 	}

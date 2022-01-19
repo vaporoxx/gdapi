@@ -3,6 +3,19 @@ use serde::Serialize;
 use uuid::Uuid;
 
 #[derive(Serialize)]
+pub struct GauntletsForm {
+	special: u8,
+	secret: &'static str,
+}
+
+pub fn gauntlets() -> GauntletsForm {
+	GauntletsForm {
+		special: 1,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct LevelForm {
 	#[serde(rename = "levelID")]
 	level_id: u32,
