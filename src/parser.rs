@@ -1,12 +1,12 @@
 use crate::data::*;
 use std::collections::HashMap;
 
-fn parse_key_value(data: &str) -> Option<HashMap<u8, String>> {
+fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	let split: Vec<_> = data.split(':').collect();
 	let mut parsed = HashMap::new();
 
 	for chunk in split.chunks(2) {
-		parsed.insert(chunk[0].parse().ok()?, chunk[1].into());
+		parsed.insert(chunk[0].parse().ok()?, chunk[1]);
 	}
 
 	Some(parsed)
@@ -39,10 +39,10 @@ impl APIData for Gauntlet {
 
 impl APIData for Level {
 	fn parse_data(data: &str) -> Option<Self> {
-		let mut map = parse_key_value(data)?;
+		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
-		let name = map.remove(&2)?;
+		let name = map.get(&2)?.to_string();
 
 		Some(Self { id, name })
 	}
@@ -61,10 +61,10 @@ impl APIData for LoginResponse {
 
 impl APIData for MapPack {
 	fn parse_data(data: &str) -> Option<Self> {
-		let mut map = parse_key_value(data)?;
+		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
-		let name = map.remove(&2)?;
+		let name = map.get(&2)?.to_string();
 
 		Some(Self { id, name })
 	}
@@ -72,10 +72,10 @@ impl APIData for MapPack {
 
 impl APIData for User {
 	fn parse_data(data: &str) -> Option<Self> {
-		let mut map = parse_key_value(data)?;
+		let map = parse_key_value(data)?;
 
 		let account_id = map.get(&16)?.parse().ok()?;
-		let username = map.remove(&1)?;
+		let username = map.get(&1)?.to_string();
 
 		Some(Self { account_id, username })
 	}
