@@ -74,6 +74,24 @@ pub fn search_user(username: &str) -> SearchUserForm {
 }
 
 #[derive(Serialize)]
+pub struct UploadAccountCommentForm<'a> {
+	#[serde(rename = "accountID")]
+	account_id: u32,
+	gjp: &'a str,
+	comment: &'a str,
+	secret: &'static str,
+}
+
+pub fn upload_account_comment<'a>(account_id: u32, gjp: &'a str, comment: &'a str) -> UploadAccountCommentForm<'a> {
+	UploadAccountCommentForm {
+		account_id,
+		gjp,
+		comment,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct UserForm {
 	#[serde(rename = "targetAccountID")]
 	target_account_id: u32,

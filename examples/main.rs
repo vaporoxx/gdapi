@@ -29,6 +29,11 @@ async fn main() {
 		Err(error) => println!("Error: {}", error),
 	}
 
+	match client.upload_account_comment("Test comment").await {
+		Ok(id) => println!("Uploaded test comment! (ID: {})", id),
+		Err(error) => println!("Error: {}", error),
+	}
+
 	match client.user(71).await {
 		Ok(user) => println!("Found user: {} (Account ID: {})", user.username, user.account_id),
 		Err(error) => println!("Error: {}", error),

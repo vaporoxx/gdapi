@@ -8,14 +8,17 @@ repository = "https://github.com/gdapi-rs/gdapi"
 license = "ISC"
 
 [dependencies]
-reqwest = "0"
+reqwest = "0.11"
+
+[dependencies.gdapi-crypto]
+git = "https://github.com/gdapi-rs/crypto"
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
 
 [dependencies.uuid]
-version = "0"
+version = "0.8"
 features = ["serde", "v4"]
 
 [dev-dependencies.tokio]

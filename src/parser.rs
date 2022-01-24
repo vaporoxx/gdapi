@@ -16,6 +16,12 @@ pub trait APIData: Sized {
 	fn parse_data(data: &str) -> Option<Self>;
 }
 
+impl APIData for u32 {
+	fn parse_data(data: &str) -> Option<Self> {
+		data.parse().ok()
+	}
+}
+
 impl APIData for Gauntlet {
 	fn parse_data(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;

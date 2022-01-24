@@ -1,12 +1,13 @@
 use crate::{builders::*, constants, data::*, error::*, form, parser::*};
+use gdapi_crypto::encode;
 use reqwest::Client as ReqwestClient;
 use serde::Serialize;
 
 #[derive(Clone, Debug, Default)]
 pub struct Client {
 	account_id: Option<u32>,
+	gjp: Option<String>,
 	inner: ReqwestClient,
-	password: Option<String>,
 }
 
 impl Client {
@@ -39,7 +40,7 @@ impl Client {
 			.await?;
 
 		self.account_id = Some(data.account_id);
-		self.password = Some(password.into());
+		self.gjp = Some(encode::gjp(password)?);
 
 		Ok(data)
 	}
@@ -50,6 +51,15 @@ impl Client {
 
 	pub async fn search_user(&self, username: &str) -> Result<User> {
 		self.request("getGJUsers20", form::search_user(username)).await
+	}
+
+	pub async fn upload_account_comment(&self, comment: &str) -> Result<u32> {
+		let account_id = self.account_id.ok_or(Error::NotLoggedIn)?;
+		let gjp = self.gjp.as_ref().ok_or(Error::NotLoggedIn)?;
+		let comment = encode::base64(comment);
+		let form = form::upload_account_comment(account_id, gjp, &comment);
+
+		self.request("uploadGJAccComment20", form).await
 	}
 
 	pub async fn user(&self, account_id: u32) -> Result<User> {
