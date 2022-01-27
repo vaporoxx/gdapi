@@ -4,6 +4,11 @@ use gdapi::Client;
 async fn main() {
 	let mut client = Client::new();
 
+	match client.gauntlet(10).await {
+		Ok(levels) => println!("The gauntlet contains {} levels!", levels.len()),
+		Err(error) => println!("Error: {}", error),
+	}
+
 	match client.gauntlets().await {
 		Ok(gauntlets) => println!("Found {} gauntlets!", gauntlets.len()),
 		Err(error) => println!("Error: {}", error),
@@ -11,6 +16,11 @@ async fn main() {
 
 	match client.level(128).await {
 		Ok(level) => println!("Found level: {} (ID: {})", level.name, level.id),
+		Err(error) => println!("Error: {}", error),
+	}
+
+	match client.levels(&[11274262, 56568010, 77508963]).await {
+		Ok(levels) => println!("Found {} levels!", levels.len()),
 		Err(error) => println!("Error: {}", error),
 	}
 

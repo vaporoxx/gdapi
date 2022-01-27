@@ -3,6 +3,19 @@ use serde::Serialize;
 use uuid::Uuid;
 
 #[derive(Serialize)]
+pub struct GauntletForm {
+	gauntlet: u8,
+	secret: &'static str,
+}
+
+pub fn gauntlet(id: u8) -> GauntletForm {
+	GauntletForm {
+		gauntlet: id,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct GauntletsForm {
 	special: u8,
 	secret: &'static str,
@@ -25,6 +38,21 @@ pub struct LevelForm {
 pub fn level(id: u32) -> LevelForm {
 	LevelForm {
 		level_id: id,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
+pub struct LevelsForm {
+	str: String,
+	r#type: u8,
+	secret: &'static str,
+}
+
+pub fn levels(ids: &[u32]) -> LevelsForm {
+	LevelsForm {
+		str: ids.iter().map(|e| e.to_string() + ",").collect(),
+		r#type: 10,
 		secret: constants::SECRET,
 	}
 }

@@ -1,4 +1,5 @@
 use crate::data::*;
+use gdapi_crypto::decode;
 use std::collections::HashMap;
 
 fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
@@ -43,8 +44,9 @@ impl APIData for Level {
 
 		let id = map.get(&1)?.parse().ok()?;
 		let name = map.get(&2)?.to_string();
+		let description = decode::base64(map.get(&3)?).ok()?;
 
-		Some(Self { id, name })
+		Some(Self { id, name, description })
 	}
 }
 
