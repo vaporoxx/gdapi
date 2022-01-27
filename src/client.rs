@@ -1,4 +1,4 @@
-use crate::{builders::*, constants, data::*, error::*, form, parser::*};
+use crate::{constants, data::*, error::*, form, parser::*};
 use gdapi_crypto::encode;
 use reqwest::Client as ReqwestClient;
 use serde::Serialize;
@@ -15,7 +15,7 @@ impl Client {
 		Self::default()
 	}
 
-	pub(crate) async fn request<T: APIData>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
+	async fn request<T: APIData>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
 		let url = format!("{}/{}.php", constants::BASE_URL, endpoint);
 		let response = self.inner.post(url).form(&form).send().await?.text().await?;
 
@@ -45,8 +45,8 @@ impl Client {
 		Ok(data)
 	}
 
-	pub fn map_packs(&self) -> MapPacksBuilder {
-		MapPacksBuilder::new(self)
+	pub async fn map_packs(&self, page: u8) -> Result<Vec<MapPack>> {
+		self.request("getGJMapPacks21", form::map_packs(page)).await
 	}
 
 	pub async fn search_user(&self, username: &str) -> Result<User> {

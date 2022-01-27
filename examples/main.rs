@@ -19,7 +19,7 @@ async fn main() {
 		Err(error) => println!("Error: {}", error),
 	}
 
-	match client.map_packs().page(6).await {
+	match client.map_packs(6).await {
 		Ok(packs) => println!("Found {} map packs!", packs.len()),
 		Err(error) => println!("Error: {}", error),
 	}
