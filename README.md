@@ -10,3 +10,7 @@ Add this to your `Cargo.toml`:
 [dependencies.gdapi]
 git = "https://github.com/gdapi-rs/gdapi"
 ```
+
+## Documentation
+
+You can visit the documentation [here](https://gdapi-rs.github.io/gdapi/gdapi).

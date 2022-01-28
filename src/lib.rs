@@ -1,3 +1,5 @@
+//! A wrapper around the Geometry Dash API.
+
 mod client;
 mod constants;
 mod form;

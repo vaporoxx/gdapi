@@ -10,7 +10,7 @@ license = "ISC"
 [dependencies]
 reqwest = "0.11"
 
-[dependencies.gdapi-crypto]
+[dependencies.gdapi_crypto]
 git = "https://github.com/gdapi-rs/crypto"
 
 [dependencies.serde]
