@@ -5,7 +5,7 @@ async fn main() {
 	let mut client = Client::new();
 
 	match client.login("Vaporox", "********").await {
-		Ok(login) => println!("Logged in! (ID: {}, Account ID: {})", login.user_id, login.account_id),
+		Ok(user) => println!("Logged in! (ID: {}, Account ID: {})", user.id, user.account_id),
 		Err(error) => println!("Error: {}", error),
 	}
 

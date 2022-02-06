@@ -49,15 +49,15 @@ impl Client {
 	}
 
 	/// Logs in the client to get access to auth-only endpoints.
-	pub async fn login(&mut self, username: &str, password: &str) -> Result<LoginResponse> {
-		let data: LoginResponse = self
+	pub async fn login(&mut self, username: &str, password: &str) -> Result<PartialUser> {
+		let user: PartialUser = self
 			.request("accounts/loginGJAccount", form::login(username, password))
 			.await?;
 
-		self.account_id = Some(data.account_id);
+		self.account_id = Some(user.account_id);
 		self.gjp = Some(encode::gjp(password)?);
 
-		Ok(data)
+		Ok(user)
 	}
 
 	/// Gets all map packs of the provided page.
