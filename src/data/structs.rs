@@ -25,7 +25,7 @@ pub struct MapPack {
 	pub id: u8,
 	/// The name of the map pack
 	pub name: String,
-	/// The ids of the gauntlet levels
+	/// The ids of the map pack levels
 	pub level_ids: [u32; 3],
 }
 
