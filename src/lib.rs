@@ -3,7 +3,7 @@
 mod client;
 mod constants;
 mod form;
-mod parser;
+mod parsable;
 
 pub mod data;
 pub mod error;

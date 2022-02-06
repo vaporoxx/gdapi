@@ -1,4 +1,4 @@
-use crate::{constants, data::*, error::*, form, parser::*};
+use crate::{constants, data::*, error::*, form, parsable::Parsable};
 use gdapi_crypto::encode;
 use reqwest::Client as ReqwestClient;
 use serde::Serialize;
@@ -17,24 +17,24 @@ impl Client {
 		Self::default()
 	}
 
-	async fn request<T: APIData>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
+	async fn request<T: Parsable>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
 		let url = format!("{}/{}.php", constants::BASE_URL, endpoint);
 		let response = self.inner.post(url).form(&form).send().await?.text().await?;
 
 		if response == "-1" {
 			Err(Error::InvalidRequest)
 		} else {
-			T::parse_data(&response).ok_or(Error::ParseResponse)
+			T::from_str(&response).ok_or(Error::ParseResponse)
 		}
 	}
 
 	/// Gets the levels of a gauntlet by its id.
-	pub async fn gauntlet(&self, id: u8) -> Result<Vec<Level>> {
+	pub async fn gauntlet(&self, id: u8) -> Result<Map<Level>> {
 		self.request("getGJLevels21", form::gauntlet(id)).await
 	}
 
 	/// Gets all available gauntlets.
-	pub async fn gauntlets(&self) -> Result<Vec<Gauntlet>> {
+	pub async fn gauntlets(&self) -> Result<Map<Gauntlet>> {
 		self.request("getGJGauntlets21", form::gauntlets()).await
 	}
 
@@ -44,7 +44,7 @@ impl Client {
 	}
 
 	/// Gets a list of levels.
-	pub async fn levels(&self, ids: &[u32]) -> Result<Vec<Level>> {
+	pub async fn levels(&self, ids: &[u32]) -> Result<Map<Level>> {
 		self.request("getGJLevels21", form::levels(ids)).await
 	}
 
@@ -61,7 +61,7 @@ impl Client {
 	}
 
 	/// Gets all map packs of the provided page.
-	pub async fn map_packs(&self, page: u8) -> Result<Vec<MapPack>> {
+	pub async fn map_packs(&self, page: u8) -> Result<Map<MapPack>> {
 		self.request("getGJMapPacks21", form::map_packs(page)).await
 	}
 

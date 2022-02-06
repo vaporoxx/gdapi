@@ -13,18 +13,18 @@ fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	Some(parsed)
 }
 
-pub trait APIData: Sized {
-	fn parse_data(data: &str) -> Option<Self>;
+pub trait Parsable: Sized {
+	fn from_str(data: &str) -> Option<Self>;
 }
 
-impl APIData for u32 {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for u32 {
+	fn from_str(data: &str) -> Option<Self> {
 		data.parse().ok()
 	}
 }
 
-impl APIData for Gauntlet {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for Gauntlet {
+	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -38,8 +38,8 @@ impl APIData for Gauntlet {
 	}
 }
 
-impl APIData for Level {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for Level {
+	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -50,8 +50,8 @@ impl APIData for Level {
 	}
 }
 
-impl APIData for LoginResponse {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for LoginResponse {
+	fn from_str(data: &str) -> Option<Self> {
 		let split = data.split_once(',')?;
 
 		let account_id = split.0.parse().ok()?;
@@ -61,30 +61,48 @@ impl APIData for LoginResponse {
 	}
 }
 
-impl APIData for MapPack {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for MapPack {
+	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
 		let name = map.get(&2)?.to_string();
+		let mut level_ids = [0; 3];
 
-		Some(Self { id, name })
+		for (i, level_id) in map.get(&3)?.split(',').enumerate() {
+			level_ids[i] = level_id.parse().ok()?;
+		}
+
+		Some(Self { id, name, level_ids })
 	}
 }
 
-impl APIData for User {
-	fn parse_data(data: &str) -> Option<Self> {
+impl Parsable for User {
+	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
+		let id = map.get(&2)?.parse().ok()?;
 		let account_id = map.get(&16)?.parse().ok()?;
 		let username = map.get(&1)?.to_string();
 
-		Some(Self { account_id, username })
+		Some(Self {
+			id,
+			account_id,
+			username,
+		})
 	}
 }
 
-impl<T: APIData> APIData for Vec<T> {
-	fn parse_data(data: &str) -> Option<Self> {
-		Some(data.split_once('#')?.0.split('|').filter_map(T::parse_data).collect())
+impl<T: Identifiable + Parsable> Parsable for HashMap<T::Id, T> {
+	fn from_str(data: &str) -> Option<Self> {
+		let mut map = HashMap::new();
+
+		for split in data.split_once('#')?.0.split('|') {
+			if let Some(parsed) = T::from_str(split) {
+				map.insert(parsed.id(), parsed);
+			}
+		}
+
+		Some(map)
 	}
 }
