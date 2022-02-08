@@ -13,4 +13,4 @@ git = "https://github.com/gdapi-rs/gdapi"
 
 ## Documentation
 
-You can visit the documentation [here](https://gdapi-rs.github.io/gdapi/gdapi).
+You can view the documentation [here](https://gdapi-rs.github.io/gdapi/gdapi).

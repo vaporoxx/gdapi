@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  doc:
+  docs:
     name: Generate Documentation
     runs-on: ubuntu-latest
     steps:
@@ -16,11 +16,11 @@ jobs:
       - name: Run cargo doc
         run: cargo doc
 
-      - name: Push to gh-pages branch
+      - name: Push to docs branch
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: gh-pages
+          BRANCH: docs
           FOLDER: target/doc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: ({sha}) {msg}
+          MESSAGE: '{msg} ({sha})'
