@@ -1,11 +1,11 @@
 //! A wrapper around the Geometry Dash API.
 
-mod client;
 mod constants;
 mod form;
+mod http;
 mod parsable;
 
 pub mod data;
 pub mod error;
 
-pub use client::Client;
+pub use http::Client;
