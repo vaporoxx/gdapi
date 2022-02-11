@@ -26,6 +26,14 @@ impl Identifiable for Level {
 	}
 }
 
+impl Identifiable for LoginUser {
+	type Id = u32;
+
+	fn id(&self) -> Self::Id {
+		self.id
+	}
+}
+
 impl Identifiable for MapPack {
 	type Id = u8;
 

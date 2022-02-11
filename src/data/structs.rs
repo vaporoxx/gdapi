@@ -18,6 +18,15 @@ pub struct Level {
 	pub description: String,
 }
 
+/// Represents a partial user that you get when logging in.
+#[derive(Clone, Copy, Debug)]
+pub struct LoginUser {
+	/// The id of the user
+	pub id: u32,
+	/// The account id of the user
+	pub account_id: u32,
+}
+
 /// Represents a map pack.
 #[derive(Clone, Debug)]
 pub struct MapPack {
@@ -27,15 +36,6 @@ pub struct MapPack {
 	pub name: String,
 	/// The ids of the map pack levels
 	pub level_ids: [u32; 3],
-}
-
-/// Represents a partial user that you get when logging in.
-#[derive(Clone, Copy, Debug)]
-pub struct PartialUser {
-	/// The id of the logged in user
-	pub id: u32,
-	/// The account id of the logged in user
-	pub account_id: u32,
 }
 
 /// Represents a user.

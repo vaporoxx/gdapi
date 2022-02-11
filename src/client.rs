@@ -49,8 +49,8 @@ impl Client {
 	}
 
 	/// Logs in the client to get access to auth-only endpoints.
-	pub async fn login(&mut self, username: &str, password: &str) -> Result<PartialUser> {
-		let user: PartialUser = self
+	pub async fn login(&mut self, username: &str, password: &str) -> Result<LoginUser> {
+		let user: LoginUser = self
 			.request("accounts/loginGJAccount", form::login(username, password))
 			.await?;
 

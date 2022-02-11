@@ -50,6 +50,17 @@ impl Parsable for Level {
 	}
 }
 
+impl Parsable for LoginUser {
+	fn from_str(data: &str) -> Option<Self> {
+		let split = data.split_once(',')?;
+
+		let id = split.1.parse().ok()?;
+		let account_id = split.0.parse().ok()?;
+
+		Some(Self { id, account_id })
+	}
+}
+
 impl Parsable for MapPack {
 	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
@@ -63,17 +74,6 @@ impl Parsable for MapPack {
 		}
 
 		Some(Self { id, name, level_ids })
-	}
-}
-
-impl Parsable for PartialUser {
-	fn from_str(data: &str) -> Option<Self> {
-		let split = data.split_once(',')?;
-
-		let id = split.1.parse().ok()?;
-		let account_id = split.0.parse().ok()?;
-
-		Some(Self { id, account_id })
 	}
 }
 
@@ -93,9 +93,9 @@ impl Parsable for User {
 	}
 }
 
-impl<T: Identifiable + Parsable> Parsable for HashMap<T::Id, T> {
+impl<T: Identifiable + Parsable> Parsable for Map<T> {
 	fn from_str(data: &str) -> Option<Self> {
-		let mut map = HashMap::new();
+		let mut map = Map::new();
 
 		for split in data.split_once('#')?.0.split('|') {
 			if let Some(parsed) = T::from_str(split) {
