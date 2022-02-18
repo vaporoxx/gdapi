@@ -13,17 +13,17 @@ fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	Some(parsed)
 }
 
-pub trait Parsable: Sized {
+pub trait Parse: Sized {
 	fn from_str(data: &str) -> Option<Self>;
 }
 
-impl Parsable for u32 {
+impl Parse for u32 {
 	fn from_str(data: &str) -> Option<Self> {
 		data.parse().ok()
 	}
 }
 
-impl Parsable for Gauntlet {
+impl Parse for Gauntlet {
 	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
@@ -38,7 +38,7 @@ impl Parsable for Gauntlet {
 	}
 }
 
-impl Parsable for Level {
+impl Parse for Level {
 	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
@@ -50,7 +50,7 @@ impl Parsable for Level {
 	}
 }
 
-impl Parsable for LoginUser {
+impl Parse for LoginUser {
 	fn from_str(data: &str) -> Option<Self> {
 		let split = data.split_once(',')?;
 
@@ -61,7 +61,7 @@ impl Parsable for LoginUser {
 	}
 }
 
-impl Parsable for MapPack {
+impl Parse for MapPack {
 	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
@@ -77,7 +77,7 @@ impl Parsable for MapPack {
 	}
 }
 
-impl Parsable for User {
+impl Parse for User {
 	fn from_str(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
@@ -93,7 +93,7 @@ impl Parsable for User {
 	}
 }
 
-impl<T: Identifiable + Parsable> Parsable for Map<T> {
+impl<T: Identify + Parse> Parse for Map<T> {
 	fn from_str(data: &str) -> Option<Self> {
 		let mut map = Map::new();
 

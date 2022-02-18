@@ -1,4 +1,4 @@
-use crate::{constants, error::*, parsable::Parsable};
+use crate::{constants, error::*, parse::Parse};
 use reqwest::Client;
 use serde::Serialize;
 
@@ -23,7 +23,7 @@ impl HttpManager {
 		self.auth = Some(Auth { account_id, gjp });
 	}
 
-	pub async fn post<T: Parsable>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
+	pub async fn post<T: Parse>(&self, endpoint: &str, form: impl Serialize) -> Result<T> {
 		let url = format!("{}/{}.php", constants::BASE_URL, endpoint);
 		let response = self.client.post(url).form(&form).send().await?.text().await?;
 

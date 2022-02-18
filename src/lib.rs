@@ -3,7 +3,7 @@
 mod constants;
 mod form;
 mod http;
-mod parsable;
+mod parse;
 
 pub mod data;
 pub mod error;
