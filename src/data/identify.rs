@@ -1,4 +1,4 @@
-use super::structs::*;
+use crate::data::*;
 use std::{collections::HashMap, hash::Hash};
 
 /// Data structures that are identifiable by a unique identifier.

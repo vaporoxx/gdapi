@@ -1,3 +1,5 @@
+//! An asynchronous client implementation.
+
 use crate::{data::*, error::*, form, http::HttpManager};
 use gdapi_crypto::encode;
 

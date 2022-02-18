@@ -1,4 +1,4 @@
-use gdapi::Client;
+use gdapi::client::Client;
 
 #[tokio::main]
 async fn main() {
