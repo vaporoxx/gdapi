@@ -25,9 +25,9 @@ impl Display for Error {
 	fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
 		match self {
 			Self::Crypto(error) => error.fmt(f),
-			Self::InvalidRequest => "server received an invalid request".fmt(f),
-			Self::NotLoggedIn => "the client needs to be logged in to use this method".fmt(f),
-			Self::ParseResponse => "server response could not be parsed".fmt(f),
+			Self::InvalidRequest => write!(f, "server received an invalid request"),
+			Self::NotLoggedIn => write!(f, "the client needs to be logged in to use this method"),
+			Self::ParseResponse => write!(f, "server response could not be parsed"),
 			Self::Reqwest(error) => error.fmt(f),
 		}
 	}
