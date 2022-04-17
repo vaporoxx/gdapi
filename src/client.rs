@@ -1,6 +1,9 @@
 //! An asynchronous client implementation.
 
-use crate::{data::*, error::*, form, http::HttpManager};
+use crate::data::*;
+use crate::error::{Error, Result};
+use crate::form;
+use crate::http::HttpManager;
 use gdapi_crypto::encode;
 
 /// The client used to make requests.

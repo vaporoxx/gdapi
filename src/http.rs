@@ -1,4 +1,6 @@
-use crate::{constants, error::*, parse::Parse};
+use crate::constants;
+use crate::error::{Error, Result};
+use crate::parse::Parse;
 use reqwest::Client;
 use serde::Serialize;
 

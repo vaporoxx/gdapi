@@ -1,5 +1,6 @@
 use crate::data::*;
-use std::{collections::HashMap, hash::Hash};
+use std::collections::HashMap;
+use std::hash::Hash;
 
 /// Data structures that are identifiable by a unique identifier.
 pub trait Identify {

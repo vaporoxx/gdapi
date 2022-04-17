@@ -2,7 +2,9 @@
 
 use gdapi_crypto::error::Error as CryptoError;
 use reqwest::Error as ReqwestError;
-use std::{error::Error as StdError, fmt::Display, result::Result as StdResult};
+use std::error::Error as StdError;
+use std::fmt::{Display, Formatter, Result as FmtResult};
+use std::result::Result as StdResult;
 
 /// The error type used across the library.
 #[derive(Debug)]
@@ -20,7 +22,7 @@ pub enum Error {
 }
 
 impl Display for Error {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+	fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
 		match self {
 			Self::Crypto(error) => error.fmt(f),
 			Self::InvalidRequest => "server received an invalid request".fmt(f),
