@@ -95,6 +95,12 @@ impl Parse for User {
 
 impl<T: Parse> Parse for Vec<T> {
 	fn from_str(data: &str) -> Option<Self> {
-		Some(data.split_once('#')?.0.split('|').filter_map(T::from_str).collect())
+		let data = data.split_once('#')?.0;
+
+		if data.is_empty() {
+			Some(Vec::new())
+		} else {
+			data.split('|').map(T::from_str).collect()
+		}
 	}
 }
