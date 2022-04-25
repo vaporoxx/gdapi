@@ -1,3 +1,5 @@
+//! A collection of data structures returned by the API.
+
 /// Represents a gauntlet.
 #[derive(Clone, Copy, Debug)]
 pub struct Gauntlet {
