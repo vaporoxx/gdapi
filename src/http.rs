@@ -1,11 +1,13 @@
 use crate::constants;
 use crate::error::{Error, Result};
 use crate::parse::Parse;
+use parking_lot::Mutex;
 use reqwest::Client;
 use serde::Serialize;
 use std::fmt::{Display, Formatter, Result as FmtResult};
+use std::sync::Arc;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Auth {
 	pub account_id: u32,
 	pub gjp: String,
@@ -39,19 +41,19 @@ impl Display for Endpoint {
 	}
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Debug, Default)]
 pub struct HttpManager {
-	auth: Option<Auth>,
+	auth: Mutex<Option<Arc<Auth>>>,
 	client: Client,
 }
 
 impl HttpManager {
-	pub fn auth(&self) -> Option<&Auth> {
-		self.auth.as_ref()
+	pub fn auth(&self) -> Option<Arc<Auth>> {
+		self.auth.lock().clone()
 	}
 
-	pub fn set_auth(&mut self, account_id: u32, gjp: String) {
-		self.auth = Some(Auth { account_id, gjp });
+	pub fn set_auth(&self, account_id: u32, gjp: String) {
+		*self.auth.lock() = Some(Arc::new(Auth { account_id, gjp }));
 	}
 
 	pub async fn post<T: Parse>(&self, endpoint: Endpoint, form: impl Serialize) -> Result<T> {

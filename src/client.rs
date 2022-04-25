@@ -5,11 +5,12 @@ use crate::error::{Error, Result};
 use crate::form;
 use crate::http::{Endpoint, HttpManager};
 use gdapi_crypto::encode;
+use std::sync::Arc;
 
 /// The client used to make requests.
 #[derive(Clone, Debug, Default)]
 pub struct Client {
-	http: HttpManager,
+	http: Arc<HttpManager>,
 }
 
 impl Client {
@@ -39,7 +40,7 @@ impl Client {
 	}
 
 	/// Logs in the client to get access to auth-only endpoints.
-	pub async fn login(&mut self, username: &str, password: &str) -> Result<LoginUser> {
+	pub async fn login(&self, username: &str, password: &str) -> Result<LoginUser> {
 		let user: LoginUser = self
 			.http
 			.post(Endpoint::LoginAccount, form::login(username, password))

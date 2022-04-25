@@ -4,7 +4,7 @@ use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-	let mut client = Client::new();
+	let client = Client::new();
 
 	let username = env::var("GD_USERNAME")?;
 	let password = env::var("GD_PASSWORD")?;
