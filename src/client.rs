@@ -1,6 +1,6 @@
 //! An asynchronous client implementation.
 
-use crate::data::*;
+use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 use crate::error::{Error, Result};
 use crate::form;
 use crate::http::{Endpoint, HttpManager};
@@ -19,12 +19,12 @@ impl Client {
 	}
 
 	/// Gets the levels of a gauntlet by its id.
-	pub async fn gauntlet(&self, id: u8) -> Result<Map<Level>> {
+	pub async fn gauntlet(&self, id: u8) -> Result<Vec<Level>> {
 		self.http.post(Endpoint::GetLevels, form::gauntlet(id)).await
 	}
 
 	/// Gets all available gauntlets.
-	pub async fn gauntlets(&self) -> Result<Map<Gauntlet>> {
+	pub async fn gauntlets(&self) -> Result<Vec<Gauntlet>> {
 		self.http.post(Endpoint::GetGauntlets, form::gauntlets()).await
 	}
 
@@ -34,7 +34,7 @@ impl Client {
 	}
 
 	/// Gets a list of levels.
-	pub async fn levels(&self, ids: &[u32]) -> Result<Map<Level>> {
+	pub async fn levels(&self, ids: &[u32]) -> Result<Vec<Level>> {
 		self.http.post(Endpoint::GetLevels, form::levels(ids)).await
 	}
 
@@ -51,7 +51,7 @@ impl Client {
 	}
 
 	/// Gets all map packs of the provided page.
-	pub async fn map_packs(&self, page: u8) -> Result<Map<MapPack>> {
+	pub async fn map_packs(&self, page: u8) -> Result<Vec<MapPack>> {
 		self.http.post(Endpoint::GetMapPacks, form::map_packs(page)).await
 	}
 

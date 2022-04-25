@@ -1,4 +1,4 @@
-use crate::data::*;
+use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 use gdapi_crypto::decode;
 use std::collections::HashMap;
 
@@ -93,16 +93,8 @@ impl Parse for User {
 	}
 }
 
-impl<T: Identify + Parse> Parse for Map<T> {
+impl<T: Parse> Parse for Vec<T> {
 	fn from_str(data: &str) -> Option<Self> {
-		let mut map = Map::new();
-
-		for split in data.split_once('#')?.0.split('|') {
-			if let Some(parsed) = T::from_str(split) {
-				map.insert(parsed.id(), parsed);
-			}
-		}
-
-		Some(map)
+		Some(data.split_once('#')?.0.split('|').filter_map(T::from_str).collect())
 	}
 }
