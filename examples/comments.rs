@@ -1,16 +1,19 @@
 use gdapi::client::Client;
+use std::env;
+use std::error::Error;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
 	let mut client = Client::new();
 
-	match client.login("Vaporox", "********").await {
-		Ok(user) => println!("Logged in! (ID: {}, Account ID: {})", user.id, user.account_id),
-		Err(error) => println!("Error: {}", error),
-	}
+	let username = env::var("GD_USERNAME")?;
+	let password = env::var("GD_PASSWORD")?;
 
-	match client.upload_account_comment("Test comment").await {
-		Ok(id) => println!("Uploaded test comment! (ID: {})", id),
-		Err(error) => println!("Error: {}", error),
-	}
+	let user = client.login(&username, &password).await?;
+	println!("Logged in to account: {:?}", user);
+
+	let comment_id = client.upload_account_comment("Uploaded with gdapi-rs!").await?;
+	println!("Created comment with id: {}", comment_id);
+
+	Ok(())
 }

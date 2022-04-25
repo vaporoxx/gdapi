@@ -1,16 +1,19 @@
 use gdapi::client::Client;
+use std::error::Error;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
 	let client = Client::new();
 
-	match client.level(128).await {
-		Ok(level) => println!("Found level: {} (ID: {})", level.name, level.id),
-		Err(error) => println!("Error: {}", error),
+	let level = client.level(128).await?;
+	println!("Found level: {:?}", level);
+
+	let levels = client.levels(&[11274262, 56568010, 77508963]).await?;
+	println!("Found {} levels!", levels.len());
+
+	for (i, level) in levels.iter().enumerate() {
+		println!("Level {}: {:?}", i + 1, level);
 	}
 
-	match client.levels(&[11274262, 56568010, 77508963]).await {
-		Ok(levels) => println!("Found {} levels!", levels.len()),
-		Err(error) => println!("Error: {}", error),
-	}
+	Ok(())
 }
