@@ -14,17 +14,17 @@ fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 }
 
 pub trait Parse: Sized {
-	fn from_str(data: &str) -> Option<Self>;
+	fn parse(data: &str) -> Option<Self>;
 }
 
 impl Parse for u32 {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		data.parse().ok()
 	}
 }
 
 impl Parse for Gauntlet {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -39,7 +39,7 @@ impl Parse for Gauntlet {
 }
 
 impl Parse for Level {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -51,7 +51,7 @@ impl Parse for Level {
 }
 
 impl Parse for LoginUser {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let split = data.split_once(',')?;
 
 		let id = split.1.parse().ok()?;
@@ -62,7 +62,7 @@ impl Parse for LoginUser {
 }
 
 impl Parse for MapPack {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -78,7 +78,7 @@ impl Parse for MapPack {
 }
 
 impl Parse for User {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&2)?.parse().ok()?;
@@ -94,13 +94,13 @@ impl Parse for User {
 }
 
 impl<T: Parse> Parse for Vec<T> {
-	fn from_str(data: &str) -> Option<Self> {
+	fn parse(data: &str) -> Option<Self> {
 		let data = data.split_once('#')?.0;
 
 		if data.is_empty() {
 			Some(Vec::new())
 		} else {
-			data.split('|').map(T::from_str).collect()
+			data.split('|').map(T::parse).collect()
 		}
 	}
 }

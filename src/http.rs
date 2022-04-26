@@ -42,12 +42,12 @@ impl Display for Endpoint {
 }
 
 #[derive(Debug, Default)]
-pub struct HttpManager {
+pub struct Http {
 	auth: Mutex<Option<Arc<Auth>>>,
 	client: Client,
 }
 
-impl HttpManager {
+impl Http {
 	pub fn auth(&self) -> Option<Arc<Auth>> {
 		self.auth.lock().clone()
 	}
@@ -63,7 +63,7 @@ impl HttpManager {
 		if response == "-1" {
 			Err(Error::InvalidRequest)
 		} else {
-			T::from_str(&response).ok_or(Error::ParseResponse)
+			T::parse(&response).ok_or(Error::ParseResponse)
 		}
 	}
 }
