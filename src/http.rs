@@ -14,6 +14,7 @@ pub struct Auth {
 }
 
 pub enum Endpoint {
+	DeleteAccComment,
 	DownloadLevel,
 	GetGauntlets,
 	GetLevels,
@@ -27,6 +28,7 @@ pub enum Endpoint {
 impl Display for Endpoint {
 	fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
 		let endpoint = match self {
+			Endpoint::DeleteAccComment => "deleteGJAccComment20",
 			Endpoint::DownloadLevel => "downloadGJLevel22",
 			Endpoint::GetGauntlets => "getGJGauntlets21",
 			Endpoint::GetLevels => "getGJLevels21",

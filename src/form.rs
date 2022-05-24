@@ -3,6 +3,25 @@ use serde::Serialize;
 use uuid::Uuid;
 
 #[derive(Serialize)]
+pub struct DeleteAccountCommentForm<'a> {
+	#[serde(rename = "accountID")]
+	account_id: u32,
+	gjp: &'a str,
+	#[serde(rename = "commentID")]
+	comment_id: u32,
+	secret: &'static str,
+}
+
+pub fn delete_account_comment(account_id: u32, gjp: &str, comment_id: u32) -> DeleteAccountCommentForm {
+	DeleteAccountCommentForm {
+		account_id,
+		gjp,
+		comment_id,
+		secret: constants::SECRET,
+	}
+}
+
+#[derive(Serialize)]
 pub struct GauntletForm {
 	gauntlet: u8,
 	secret: &'static str,

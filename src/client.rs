@@ -19,6 +19,14 @@ impl Client {
 		Self::default()
 	}
 
+	/// Deletes an account comment. Requires the client to be logged in.
+	pub async fn delete_account_comment(&self, comment_id: u32) -> Result<()> {
+		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
+		let form = form::delete_account_comment(auth.account_id, &auth.gjp, comment_id);
+
+		self.http.post(Endpoint::DeleteAccComment, form).await
+	}
+
 	/// Gets the levels of a gauntlet by its id.
 	pub async fn gauntlet(&self, id: u8) -> Result<Vec<Level>> {
 		self.http.post(Endpoint::GetLevels, form::gauntlet(id)).await

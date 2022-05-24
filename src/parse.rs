@@ -17,6 +17,12 @@ pub trait Parse: Sized {
 	fn parse(data: &str) -> Option<Self>;
 }
 
+impl Parse for () {
+	fn parse(_: &str) -> Option<Self> {
+		Some(())
+	}
+}
+
 impl Parse for u32 {
 	fn parse(data: &str) -> Option<Self> {
 		data.parse().ok()

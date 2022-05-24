@@ -13,7 +13,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 	println!("Logged in to account: {:?}", user);
 
 	let comment_id = client.upload_account_comment("Uploaded with gdapi-rs!").await?;
-	println!("Created comment with id: {}", comment_id);
+	println!("Created account comment with id: {}", comment_id);
+
+	client.delete_account_comment(comment_id).await?;
+	println!("Deleted the account comment!");
 
 	Ok(())
 }
