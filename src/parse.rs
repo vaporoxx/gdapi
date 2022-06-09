@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use gdapi_crypto::decode;
+use gdapi_crypto::base64;
 
 use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 
@@ -52,7 +52,7 @@ impl Parse for Level {
 
 		let id = map.get(&1)?.parse().ok()?;
 		let name = map.get(&2)?.to_string();
-		let description = decode::base64(map.get(&3)?).ok()?;
+		let description = base64::decode(map.get(&3)?).ok()?;
 
 		Some(Self { id, name, description })
 	}

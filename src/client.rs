@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 
-use gdapi_crypto::encode;
+use gdapi_crypto::{base64, gjp};
 
 use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 use crate::error::{Error, Result};
@@ -56,7 +56,7 @@ impl Client {
 			.post(Endpoint::LoginAccount, form::login(username, password))
 			.await?;
 
-		self.http.set_auth(user.account_id, encode::gjp(password)?);
+		self.http.set_auth(user.account_id, gjp::encode(password)?);
 
 		Ok(user)
 	}
@@ -74,7 +74,7 @@ impl Client {
 	/// Uploads an account comment. Requires the client to be logged in.
 	pub async fn upload_account_comment(&self, comment: &str) -> Result<u32> {
 		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
-		let comment = encode::base64(comment);
+		let comment = base64::encode(comment);
 		let form = form::upload_account_comment(auth.account_id, &auth.gjp, &comment);
 
 		self.http.post(Endpoint::UploadAccComment, form).await
