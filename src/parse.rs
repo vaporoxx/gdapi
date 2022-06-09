@@ -1,6 +1,8 @@
-use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
-use gdapi_crypto::decode;
 use std::collections::HashMap;
+
+use gdapi_crypto::decode;
+
+use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 
 fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	let split: Vec<_> = data.split(':').collect();

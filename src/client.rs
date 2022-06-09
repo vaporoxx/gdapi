@@ -1,11 +1,13 @@
 //! An asynchronous client implementation.
 
+use std::sync::Arc;
+
+use gdapi_crypto::encode;
+
 use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 use crate::error::{Error, Result};
 use crate::form;
 use crate::http::{Endpoint, Http};
-use gdapi_crypto::encode;
-use std::sync::Arc;
 
 /// The client used to make requests.
 #[derive(Clone, Debug, Default)]

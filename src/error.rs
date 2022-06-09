@@ -1,10 +1,11 @@
 //! The error type and all related types.
 
-use gdapi_crypto::error::Error as CryptoError;
-use reqwest::Error as ReqwestError;
 use std::error::Error as StdError;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::result::Result as StdResult;
+
+use gdapi_crypto::error::Error as CryptoError;
+use reqwest::Error as ReqwestError;
 
 /// The error type used across the library.
 #[derive(Debug)]

@@ -1,6 +1,7 @@
-use gdapi::client::Client;
 use std::env;
 use std::error::Error;
+
+use gdapi::client::Client;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

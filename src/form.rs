@@ -1,6 +1,7 @@
-use crate::constants;
 use serde::Serialize;
 use uuid::Uuid;
+
+use crate::constants;
 
 #[derive(Serialize)]
 pub struct DeleteAccountCommentForm<'a> {

@@ -1,11 +1,13 @@
-use crate::constants;
-use crate::error::{Error, Result};
-use crate::parse::Parse;
+use std::fmt::{Display, Formatter, Result as FmtResult};
+use std::sync::Arc;
+
 use parking_lot::Mutex;
 use reqwest::Client;
 use serde::Serialize;
-use std::fmt::{Display, Formatter, Result as FmtResult};
-use std::sync::Arc;
+
+use crate::constants;
+use crate::error::{Error, Result};
+use crate::parse::Parse;
 
 #[derive(Debug)]
 pub struct Auth {
