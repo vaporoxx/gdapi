@@ -17,24 +17,32 @@ fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	Some(parsed)
 }
 
+fn parse_vec<T: Parse>(data: &str) -> Option<Vec<T>> {
+	if data.is_empty() {
+		Some(Vec::new())
+	} else {
+		data.split('|').map(|data| T::parse(data, None)).collect()
+	}
+}
+
 pub trait Parse: Sized {
-	fn parse(data: &str) -> Option<Self>;
+	fn parse(data: &str, remaining: Option<&str>) -> Option<Self>;
 }
 
 impl Parse for () {
-	fn parse(_: &str) -> Option<Self> {
+	fn parse(_: &str, _: Option<&str>) -> Option<Self> {
 		Some(())
 	}
 }
 
 impl Parse for u32 {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		data.parse().ok()
 	}
 }
 
 impl Parse for Gauntlet {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -49,7 +57,7 @@ impl Parse for Gauntlet {
 }
 
 impl Parse for Level {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -61,7 +69,7 @@ impl Parse for Level {
 }
 
 impl Parse for LoginUser {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		let split = data.split_once(',')?;
 
 		let id = split.1.parse().ok()?;
@@ -72,7 +80,7 @@ impl Parse for LoginUser {
 }
 
 impl Parse for MapPack {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&1)?.parse().ok()?;
@@ -88,7 +96,7 @@ impl Parse for MapPack {
 }
 
 impl Parse for User {
-	fn parse(data: &str) -> Option<Self> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
 		let map = parse_key_value(data)?;
 
 		let id = map.get(&2)?.parse().ok()?;
@@ -103,14 +111,20 @@ impl Parse for User {
 	}
 }
 
-impl<T: Parse> Parse for Vec<T> {
-	fn parse(data: &str) -> Option<Self> {
-		let data = data.split_once('#')?.0;
+impl Parse for Vec<Gauntlet> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
+		parse_vec(data)
+	}
+}
 
-		if data.is_empty() {
-			Some(Vec::new())
-		} else {
-			data.split('|').map(T::parse).collect()
-		}
+impl Parse for Vec<Level> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
+		parse_vec(data)
+	}
+}
+
+impl Parse for Vec<MapPack> {
+	fn parse(data: &str, _: Option<&str>) -> Option<Self> {
+		parse_vec(data)
 	}
 }

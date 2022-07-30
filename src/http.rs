@@ -68,7 +68,12 @@ impl Http {
 		if response == "-1" {
 			Err(Error::InvalidRequest)
 		} else {
-			T::parse(&response).ok_or(Error::ParseResponse)
+			let (data, remaining) = match response.split_once('#') {
+				Some((data, remaining)) => (data, Some(remaining)),
+				None => (response.as_str(), None),
+			};
+
+			T::parse(data, remaining).ok_or(Error::ParseResponse)
 		}
 	}
 }
