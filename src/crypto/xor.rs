@@ -2,6 +2,7 @@ use super::error::Result;
 
 pub mod keys {
 	pub const GJP: &str = "37526";
+	pub const PASSWORD: &str = "26364";
 }
 
 pub fn xor(input: &str, key: &str) -> Result<String> {
