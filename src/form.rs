@@ -2,33 +2,35 @@ use serde::Serialize;
 use uuid::Uuid;
 
 use crate::constants;
+use crate::http::Auth;
+use crate::model::id::{AccountId, CommentId, GauntletId, LevelId};
 
 #[derive(Serialize)]
 pub struct DeleteAccountCommentForm<'a> {
 	#[serde(rename = "accountID")]
-	account_id: u32,
+	account_id: AccountId,
 	gjp: &'a str,
 	#[serde(rename = "commentID")]
-	comment_id: u32,
+	comment_id: CommentId,
 	secret: &'static str,
 }
 
-pub fn delete_account_comment(account_id: u32, gjp: &str, comment_id: u32) -> DeleteAccountCommentForm {
+pub fn delete_account_comment(auth: &Auth, id: CommentId) -> DeleteAccountCommentForm {
 	DeleteAccountCommentForm {
-		account_id,
-		gjp,
-		comment_id,
+		account_id: auth.account_id,
+		gjp: &auth.gjp,
+		comment_id: id,
 		secret: constants::SECRET,
 	}
 }
 
 #[derive(Serialize)]
 pub struct GauntletForm {
-	gauntlet: u8,
+	gauntlet: GauntletId,
 	secret: &'static str,
 }
 
-pub fn gauntlet(id: u8) -> GauntletForm {
+pub fn gauntlet(id: GauntletId) -> GauntletForm {
 	GauntletForm {
 		gauntlet: id,
 		secret: constants::SECRET,
@@ -51,11 +53,11 @@ pub fn gauntlets() -> GauntletsForm {
 #[derive(Serialize)]
 pub struct LevelForm {
 	#[serde(rename = "levelID")]
-	level_id: u32,
+	level_id: LevelId,
 	secret: &'static str,
 }
 
-pub fn level(id: u32) -> LevelForm {
+pub fn level(id: LevelId) -> LevelForm {
 	LevelForm {
 		level_id: id,
 		secret: constants::SECRET,
@@ -63,15 +65,15 @@ pub fn level(id: u32) -> LevelForm {
 }
 
 #[derive(Serialize)]
-pub struct LevelsForm {
-	str: String,
+pub struct LevelsForm<'a> {
+	str: &'a str,
 	r#type: u8,
 	secret: &'static str,
 }
 
-pub fn levels(ids: &[u32]) -> LevelsForm {
+pub fn levels(query: &str) -> LevelsForm {
 	LevelsForm {
-		str: ids.iter().map(|e| e.to_string() + ",").collect(),
+		str: query,
 		r#type: 10,
 		secret: constants::SECRET,
 	}
@@ -114,9 +116,9 @@ pub struct SearchUserForm<'a> {
 	secret: &'static str,
 }
 
-pub fn search_user(username: &str) -> SearchUserForm {
+pub fn search_user(query: &str) -> SearchUserForm {
 	SearchUserForm {
-		str: username,
+		str: query,
 		secret: constants::SECRET,
 	}
 }
@@ -124,16 +126,16 @@ pub fn search_user(username: &str) -> SearchUserForm {
 #[derive(Serialize)]
 pub struct UploadAccountCommentForm<'a> {
 	#[serde(rename = "accountID")]
-	account_id: u32,
+	account_id: AccountId,
 	gjp: &'a str,
 	comment: &'a str,
 	secret: &'static str,
 }
 
-pub fn upload_account_comment<'a>(account_id: u32, gjp: &'a str, comment: &'a str) -> UploadAccountCommentForm<'a> {
+pub fn upload_account_comment<'a>(auth: &'a Auth, comment: &'a str) -> UploadAccountCommentForm<'a> {
 	UploadAccountCommentForm {
-		account_id,
-		gjp,
+		account_id: auth.account_id,
+		gjp: &auth.gjp,
 		comment,
 		secret: constants::SECRET,
 	}
@@ -142,13 +144,13 @@ pub fn upload_account_comment<'a>(account_id: u32, gjp: &'a str, comment: &'a st
 #[derive(Serialize)]
 pub struct UserForm {
 	#[serde(rename = "targetAccountID")]
-	target_account_id: u32,
+	target_account_id: AccountId,
 	secret: &'static str,
 }
 
-pub fn user(account_id: u32) -> UserForm {
+pub fn user(id: AccountId) -> UserForm {
 	UserForm {
-		target_account_id: account_id,
+		target_account_id: id,
 		secret: constants::SECRET,
 	}
 }

@@ -7,11 +7,12 @@ use serde::Serialize;
 
 use crate::constants;
 use crate::error::{Error, Result};
+use crate::model::id::AccountId;
 use crate::parse::Parse;
 
 #[derive(Debug)]
 pub struct Auth {
-	pub account_id: u32,
+	pub account_id: AccountId,
 	pub gjp: String,
 }
 
@@ -56,7 +57,7 @@ impl Http {
 		self.auth.lock().clone()
 	}
 
-	pub fn set_auth(&self, account_id: u32, gjp: String) {
+	pub fn set_auth(&self, account_id: AccountId, gjp: String) {
 		*self.auth.lock() = Some(Arc::new(Auth { account_id, gjp }));
 	}
 

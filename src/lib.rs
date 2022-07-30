@@ -11,5 +11,5 @@ mod http;
 mod parse;
 
 pub mod client;
-pub mod data;
 pub mod error;
+pub mod model;

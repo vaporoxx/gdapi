@@ -4,10 +4,14 @@ use std::sync::Arc;
 
 use gdapi_crypto::{base64, gjp};
 
-use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
 use crate::error::{Error, Result};
 use crate::form;
 use crate::http::{Endpoint, Http};
+use crate::model::gauntlet::Gauntlet;
+use crate::model::id::{AccountId, CommentId, GauntletId, LevelId};
+use crate::model::level::Level;
+use crate::model::map_pack::MapPack;
+use crate::model::user::{LoginUser, User};
 
 /// The client used to make requests.
 #[derive(Clone, Debug, Default)]
@@ -22,15 +26,15 @@ impl Client {
 	}
 
 	/// Deletes an account comment. Requires the client to be logged in.
-	pub async fn delete_account_comment(&self, comment_id: u32) -> Result<()> {
+	pub async fn delete_account_comment(&self, id: CommentId) -> Result<()> {
 		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
-		let form = form::delete_account_comment(auth.account_id, &auth.gjp, comment_id);
+		let form = form::delete_account_comment(&auth, id);
 
 		self.http.post(Endpoint::DeleteAccComment, form).await
 	}
 
 	/// Gets the levels of a gauntlet by its id.
-	pub async fn gauntlet(&self, id: u8) -> Result<Vec<Level>> {
+	pub async fn gauntlet(&self, id: GauntletId) -> Result<Vec<Level>> {
 		self.http.post(Endpoint::GetLevels, form::gauntlet(id)).await
 	}
 
@@ -40,13 +44,16 @@ impl Client {
 	}
 
 	/// Gets a level by its id.
-	pub async fn level(&self, id: u32) -> Result<Level> {
+	pub async fn level(&self, id: LevelId) -> Result<Level> {
 		self.http.post(Endpoint::DownloadLevel, form::level(id)).await
 	}
 
 	/// Gets a list of levels.
-	pub async fn levels(&self, ids: &[u32]) -> Result<Vec<Level>> {
-		self.http.post(Endpoint::GetLevels, form::levels(ids)).await
+	pub async fn levels(&self, ids: &[LevelId]) -> Result<Vec<Level>> {
+		let strings: Vec<_> = ids.iter().map(ToString::to_string).collect();
+		let query = strings.join(",");
+
+		self.http.post(Endpoint::GetLevels, form::levels(&query)).await
 	}
 
 	/// Logs in the client to get access to auth-only endpoints.
@@ -66,22 +73,22 @@ impl Client {
 		self.http.post(Endpoint::GetMapPacks, form::map_packs(page)).await
 	}
 
-	/// Searches for a user by its username.
-	pub async fn search_user(&self, username: &str) -> Result<User> {
-		self.http.post(Endpoint::GetUsers, form::search_user(username)).await
+	/// Searches for a user.
+	pub async fn search_user(&self, query: &str) -> Result<User> {
+		self.http.post(Endpoint::GetUsers, form::search_user(query)).await
 	}
 
 	/// Uploads an account comment. Requires the client to be logged in.
-	pub async fn upload_account_comment(&self, comment: &str) -> Result<u32> {
+	pub async fn upload_account_comment(&self, comment: &str) -> Result<CommentId> {
 		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
 		let comment = base64::encode(comment);
-		let form = form::upload_account_comment(auth.account_id, &auth.gjp, &comment);
+		let form = form::upload_account_comment(&auth, &comment);
 
 		self.http.post(Endpoint::UploadAccComment, form).await
 	}
 
 	/// Gets a user by its account id.
-	pub async fn user(&self, account_id: u32) -> Result<User> {
-		self.http.post(Endpoint::GetUserInfo, form::user(account_id)).await
+	pub async fn user(&self, id: AccountId) -> Result<User> {
+		self.http.post(Endpoint::GetUserInfo, form::user(id)).await
 	}
 }

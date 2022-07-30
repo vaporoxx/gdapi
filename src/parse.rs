@@ -2,7 +2,10 @@ use std::collections::HashMap;
 
 use gdapi_crypto::base64;
 
-use crate::data::{Gauntlet, Level, LoginUser, MapPack, User};
+use crate::model::gauntlet::Gauntlet;
+use crate::model::level::Level;
+use crate::model::map_pack::MapPack;
+use crate::model::user::{LoginUser, User};
 
 fn parse_key_value(data: &str) -> Option<HashMap<u8, &str>> {
 	let split: Vec<_> = data.split(':').collect();
