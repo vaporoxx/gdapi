@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
-use gdapi_crypto::base64;
-
+use crate::crypto::base64;
 use crate::model::gauntlet::Gauntlet;
 use crate::model::level::Level;
 use crate::model::map_pack::MapPack;

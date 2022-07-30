@@ -8,11 +8,9 @@ repository = "https://github.com/gdapi-rs/gdapi"
 license = "ISC"
 
 [dependencies]
+base64 = "0.13"
 parking_lot = "0.12"
 reqwest = "0.11"
-
-[dependencies.gdapi-crypto]
-git = "https://github.com/gdapi-rs/crypto"
 
 [dependencies.serde]
 version = "1"

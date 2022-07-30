@@ -2,8 +2,7 @@
 
 use std::sync::Arc;
 
-use gdapi_crypto::{base64, gjp};
-
+use crate::crypto::{base64, gjp};
 use crate::error::{Error, Result};
 use crate::form;
 use crate::http::{Endpoint, Http};

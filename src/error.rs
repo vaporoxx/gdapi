@@ -4,13 +4,14 @@ use std::error::Error as StdError;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::result::Result as StdResult;
 
-use gdapi_crypto::error::Error as CryptoError;
 use reqwest::Error as ReqwestError;
+
+pub use crate::crypto::error::Error as CryptoError;
 
 /// The error type used across the library.
 #[derive(Debug)]
 pub enum Error {
-	/// An error returned by [`gdapi_crypto`]
+	/// An error returned when trying to decode or encode a value
 	Crypto(CryptoError),
 	/// The server received an invalid request
 	InvalidRequest,
