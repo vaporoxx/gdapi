@@ -1,7 +1,7 @@
 [package]
 name = "gdapi"
 version = "0.1.0"
-authors = ["Vaporox"]
+authors = ["vaporoxx"]
 edition = "2021"
 description = "A wrapper around the Geometry Dash API"
 repository = "https://github.com/gdapi-rs/gdapi"
