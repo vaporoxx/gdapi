@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CopyType","DemonDifficulty","Difficulty","Rating"],"struct":["Author","Level"]};
