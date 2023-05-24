@@ -9,7 +9,7 @@ use base64::DecodeError;
 /// An error returned when trying to decode or encode a value.
 #[derive(Debug)]
 pub enum Error {
-	/// An error returned by [`base64::decode_config`]
+	/// An error returned by [`base64`]
 	Decode(DecodeError),
 	/// An error returned by [`String::from_utf8`]
 	FromUtf8(FromUtf8Error),
