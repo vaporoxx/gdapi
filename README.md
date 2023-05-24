@@ -8,9 +8,9 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies.gdapi]
-git = "https://github.com/gdapi-rs/gdapi"
+git = "https://github.com/vaporoxx/gdapi"
 ```
 
 ## Documentation
 
-You can view the documentation [here](https://gdapi-rs.github.io/gdapi/gdapi).
+You can view the documentation [here](https://vaporoxx.github.io/gdapi/gdapi).

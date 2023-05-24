@@ -4,11 +4,11 @@ version = "0.1.0"
 authors = ["vaporoxx"]
 edition = "2021"
 description = "A wrapper around the Geometry Dash API"
-repository = "https://github.com/gdapi-rs/gdapi"
+repository = "https://github.com/vaporoxx/gdapi"
 license = "ISC"
 
 [dependencies]
-base64 = "0.13"
+base64 = "0.21"
 parking_lot = "0.12"
 reqwest = "0.11"
 

@@ -23,4 +23,5 @@ jobs:
           BRANCH: docs
           FOLDER: target/doc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SQUASH_HISTORY: true
           MESSAGE: '{msg} ({sha})'
