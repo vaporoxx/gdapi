@@ -1,26 +1,32 @@
 use serde::Serialize;
-use uuid::Uuid;
 
-use crate::constants;
 use crate::http::Auth;
 use crate::model::id::{AccountId, CommentId, GauntletId, LevelId};
+
+mod secrets {
+	pub const ACCOUNT: &str = "Wmfv3899gc9";
+	pub const COMMON: &str = "Wmfd2893gb7";
+}
 
 #[derive(Serialize)]
 pub struct DeleteAccountCommentForm<'a> {
 	#[serde(rename = "accountID")]
 	account_id: AccountId,
-	gjp: &'a str,
 	#[serde(rename = "commentID")]
 	comment_id: CommentId,
+	gjp2: &'a str,
 	secret: &'static str,
+	#[serde(rename = "targetAccountID")]
+	target_account_id: AccountId,
 }
 
-pub fn delete_account_comment(auth: &Auth, id: CommentId) -> DeleteAccountCommentForm {
+pub const fn delete_account_comment(auth: &Auth, id: CommentId) -> DeleteAccountCommentForm {
 	DeleteAccountCommentForm {
 		account_id: auth.account_id,
-		gjp: &auth.gjp,
 		comment_id: id,
-		secret: constants::SECRET,
+		gjp2: auth.gjp2.as_str(),
+		secret: secrets::COMMON,
+		target_account_id: auth.account_id,
 	}
 }
 
@@ -30,23 +36,23 @@ pub struct GauntletForm {
 	secret: &'static str,
 }
 
-pub fn gauntlet(id: GauntletId) -> GauntletForm {
+pub const fn gauntlet(id: GauntletId) -> GauntletForm {
 	GauntletForm {
 		gauntlet: id,
-		secret: constants::SECRET,
+		secret: secrets::COMMON,
 	}
 }
 
 #[derive(Serialize)]
 pub struct GauntletsForm {
-	special: u8,
 	secret: &'static str,
+	special: u8,
 }
 
-pub fn gauntlets() -> GauntletsForm {
+pub const fn gauntlets() -> GauntletsForm {
 	GauntletsForm {
+		secret: secrets::COMMON,
 		special: 1,
-		secret: constants::SECRET,
 	}
 }
 
@@ -57,43 +63,44 @@ pub struct LevelForm {
 	secret: &'static str,
 }
 
-pub fn level(id: LevelId) -> LevelForm {
+pub const fn level(id: LevelId) -> LevelForm {
 	LevelForm {
 		level_id: id,
-		secret: constants::SECRET,
+		secret: secrets::COMMON,
 	}
 }
 
 #[derive(Serialize)]
 pub struct LevelsForm<'a> {
-	str: &'a str,
-	r#type: u8,
+	#[serde(rename = "type")]
+	kind: u8,
 	secret: &'static str,
+	str: &'a str,
 }
 
-pub fn levels(query: &str) -> LevelsForm {
+pub const fn levels(query: &str) -> LevelsForm {
 	LevelsForm {
+		kind: 10,
+		secret: secrets::COMMON,
 		str: query,
-		r#type: 10,
-		secret: constants::SECRET,
 	}
 }
 
 #[derive(Serialize)]
 pub struct LoginForm<'a> {
+	gjp2: &'a str,
+	secret: &'static str,
+	udid: &'static str,
 	#[serde(rename = "userName")]
 	username: &'a str,
-	password: &'a str,
-	udid: Uuid,
-	secret: &'static str,
 }
 
-pub fn login<'a>(username: &'a str, password: &'a str) -> LoginForm<'a> {
+pub const fn login<'a>(username: &'a str, gjp2: &'a str) -> LoginForm<'a> {
 	LoginForm {
+		gjp2,
+		secret: secrets::ACCOUNT,
+		udid: env!("CARGO_PKG_NAME"),
 		username,
-		password,
-		udid: Uuid::new_v4(),
-		secret: constants::LOGIN_SECRET,
 	}
 }
 
@@ -103,23 +110,23 @@ pub struct MapPacksForm {
 	secret: &'static str,
 }
 
-pub fn map_packs(page: u8) -> MapPacksForm {
+pub const fn map_packs(page: u8) -> MapPacksForm {
 	MapPacksForm {
 		page,
-		secret: constants::SECRET,
+		secret: secrets::COMMON,
 	}
 }
 
 #[derive(Serialize)]
 pub struct SearchUserForm<'a> {
-	str: &'a str,
 	secret: &'static str,
+	str: &'a str,
 }
 
-pub fn search_user(query: &str) -> SearchUserForm {
+pub const fn search_user(query: &str) -> SearchUserForm {
 	SearchUserForm {
+		secret: secrets::COMMON,
 		str: query,
-		secret: constants::SECRET,
 	}
 }
 
@@ -127,30 +134,30 @@ pub fn search_user(query: &str) -> SearchUserForm {
 pub struct UploadAccountCommentForm<'a> {
 	#[serde(rename = "accountID")]
 	account_id: AccountId,
-	gjp: &'a str,
 	comment: &'a str,
+	gjp2: &'a str,
 	secret: &'static str,
 }
 
-pub fn upload_account_comment<'a>(auth: &'a Auth, comment: &'a str) -> UploadAccountCommentForm<'a> {
+pub const fn upload_account_comment<'a>(auth: &'a Auth, comment: &'a str) -> UploadAccountCommentForm<'a> {
 	UploadAccountCommentForm {
 		account_id: auth.account_id,
-		gjp: &auth.gjp,
 		comment,
-		secret: constants::SECRET,
+		gjp2: auth.gjp2.as_str(),
+		secret: secrets::COMMON,
 	}
 }
 
 #[derive(Serialize)]
 pub struct UserForm {
+	secret: &'static str,
 	#[serde(rename = "targetAccountID")]
 	target_account_id: AccountId,
-	secret: &'static str,
 }
 
-pub fn user(id: AccountId) -> UserForm {
+pub const fn user(id: AccountId) -> UserForm {
 	UserForm {
+		secret: secrets::COMMON,
 		target_account_id: id,
-		secret: constants::SECRET,
 	}
 }

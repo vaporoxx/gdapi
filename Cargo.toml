@@ -2,23 +2,19 @@
 name = "gdapi"
 version = "0.1.0"
 authors = ["vaporoxx"]
-edition = "2021"
+edition = "2024"
 description = "A wrapper around the Geometry Dash API"
 repository = "https://github.com/vaporoxx/gdapi"
 license = "ISC"
 
 [dependencies]
-base64 = "0.21"
-parking_lot = "0.12"
-reqwest = "0.11"
+base64 = "0.22"
+reqwest = "0.12"
+sha1 = "0.10"
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
-
-[dependencies.uuid]
-version = "1"
-features = ["serde", "v4"]
 
 [dev-dependencies.tokio]
 version = "1"

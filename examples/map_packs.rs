@@ -10,7 +10,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 	println!("Found {} map packs!", map_packs.len());
 
 	for (i, map_pack) in map_packs.iter().enumerate() {
-		println!("Map pack {}: {:?}", i + 1, map_pack);
+		println!("Map pack {}: {map_pack:?}", i + 1);
 	}
 
 	Ok(())

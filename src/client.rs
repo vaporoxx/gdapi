@@ -2,8 +2,8 @@
 
 use std::sync::Arc;
 
-use crate::crypto::{base64, gjp};
-use crate::error::{Error, Result};
+use crate::crypto::encode;
+use crate::error::Result;
 use crate::form;
 use crate::http::{Endpoint, Http};
 use crate::model::gauntlet::Gauntlet;
@@ -24,10 +24,10 @@ impl Client {
 		Self::default()
 	}
 
-	/// Deletes an account comment. Requires the client to be logged in.
+	/// Deletes an account comment. Requires authentication via [`Client::login`].
 	pub async fn delete_account_comment(&self, id: CommentId) -> Result<()> {
-		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
-		let form = form::delete_account_comment(&auth, id);
+		let auth = self.http.auth()?;
+		let form = form::delete_account_comment(auth, id);
 
 		self.http.post(Endpoint::DeleteAccComment, form).await
 	}
@@ -49,20 +49,22 @@ impl Client {
 
 	/// Gets a list of levels.
 	pub async fn levels(&self, ids: &[LevelId]) -> Result<Vec<Level>> {
-		let strings: Vec<_> = ids.iter().map(ToString::to_string).collect();
+		let strings: Vec<_> = ids.iter().map(LevelId::to_string).collect();
 		let query = strings.join(",");
 
 		self.http.post(Endpoint::GetLevels, form::levels(&query)).await
 	}
 
-	/// Logs in the client to get access to auth-only endpoints.
+	/// Authenticates the client to get access to auth-only endpoints.
 	pub async fn login(&self, username: &str, password: &str) -> Result<LoginUser> {
+		let gjp2 = encode::gjp2(password);
+
 		let user: LoginUser = self
 			.http
-			.post(Endpoint::LoginAccount, form::login(username, password))
+			.post(Endpoint::LoginAccount, form::login(username, &gjp2))
 			.await?;
 
-		self.http.set_auth(user.account_id, gjp::encode(password)?);
+		self.http.authenticate(user.account_id, gjp2)?;
 
 		Ok(user)
 	}
@@ -77,11 +79,11 @@ impl Client {
 		self.http.post(Endpoint::GetUsers, form::search_user(query)).await
 	}
 
-	/// Uploads an account comment. Requires the client to be logged in.
+	/// Uploads an account comment. Requires authentication via [`Client::login`].
 	pub async fn upload_account_comment(&self, comment: &str) -> Result<CommentId> {
-		let auth = self.http.auth().ok_or(Error::NotLoggedIn)?;
-		let comment = base64::encode(comment);
-		let form = form::upload_account_comment(&auth, &comment);
+		let auth = self.http.auth()?;
+		let comment = encode::base64(comment);
+		let form = form::upload_account_comment(auth, &comment);
 
 		self.http.post(Endpoint::UploadAccComment, form).await
 	}

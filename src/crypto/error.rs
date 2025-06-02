@@ -1,24 +1,22 @@
-use std::error::Error as StdError;
-use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::num::ParseIntError;
-use std::result::Result as StdResult;
 use std::string::FromUtf8Error;
+use std::{error, fmt};
 
 use base64::DecodeError;
 
-/// An error returned when trying to decode or encode a value.
+/// The error type for all cryptographic actions.
 #[derive(Debug)]
 pub enum Error {
-	/// An error returned by [`base64`]
+	/// A wrapper around a [`DecodeError`]
 	Decode(DecodeError),
-	/// An error returned by [`String::from_utf8`]
+	/// A wrapper around a [`FromUtf8Error`]
 	FromUtf8(FromUtf8Error),
-	/// An error returned when parsing an integer fails
+	/// A wrapper around a [`ParseIntError`]
 	ParseInt(ParseIntError),
 }
 
-impl Display for Error {
-	fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+impl fmt::Display for Error {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::Decode(error) => error.fmt(f),
 			Self::FromUtf8(error) => error.fmt(f),
@@ -27,8 +25,8 @@ impl Display for Error {
 	}
 }
 
-impl StdError for Error {
-	fn source(&self) -> Option<&(dyn StdError + 'static)> {
+impl error::Error for Error {
+	fn source(&self) -> Option<&(dyn error::Error + 'static)> {
 		match self {
 			Self::Decode(error) => Some(error),
 			Self::FromUtf8(error) => Some(error),
@@ -54,5 +52,3 @@ impl From<ParseIntError> for Error {
 		Self::ParseInt(error)
 	}
 }
-
-pub type Result<T> = StdResult<T, Error>;
