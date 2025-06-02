@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"type":["AccountId","CommentId","GauntletId","LevelId","MapPackId","UserId"]};

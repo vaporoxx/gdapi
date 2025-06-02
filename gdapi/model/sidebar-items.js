@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["gauntlet","id","level","map_pack","user"]};
