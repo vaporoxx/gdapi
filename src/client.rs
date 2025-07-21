@@ -19,11 +19,6 @@ pub struct Client {
 }
 
 impl Client {
-	/// Creates a new client.
-	pub fn new() -> Self {
-		Self::default()
-	}
-
 	/// Deletes an account comment. Requires authentication via [`Client::login`].
 	pub async fn delete_account_comment(&self, id: CommentId) -> Result<()> {
 		let auth = self.http.auth()?;
@@ -72,6 +67,11 @@ impl Client {
 	/// Gets all map packs of the provided page.
 	pub async fn map_packs(&self, page: u8) -> Result<Vec<MapPack>> {
 		self.http.post(Endpoint::GetMapPacks, form::map_packs(page)).await
+	}
+
+	/// Creates a new client.
+	pub fn new() -> Self {
+		Self::default()
 	}
 
 	/// Searches for a user.

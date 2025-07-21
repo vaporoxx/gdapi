@@ -12,16 +12,16 @@ pub struct List<'a> {
 }
 
 impl<'a> List<'a> {
-	pub fn new(data: &'a str, sep: char) -> Self {
-		Self { inner: data.split(sep) }
-	}
-
 	pub fn ints<T: FromStr<Err = ParseIntError>, const N: usize>(self) -> Result<[T; N]> {
 		self.inner
 			.map(|value| value.parse().map_err(Error::from))
 			.collect::<Result<Vec<_>, _>>()?
 			.try_into()
 			.or(Err(Error::InvalidLength.into()))
+	}
+
+	pub fn new(data: &'a str, sep: char) -> Self {
+		Self { inner: data.split(sep) }
 	}
 
 	pub fn next(&mut self) -> Result<&'a str> {
@@ -45,20 +45,6 @@ pub struct Map<'a> {
 }
 
 impl<'a> Map<'a> {
-	pub fn new(data: &'a str, sep: char) -> Result<Self> {
-		let mut inner = HashMap::new();
-		let mut split = data.split(sep);
-
-		while let Some(next) = split.next() {
-			let key = next.parse().map_err(Error::from)?;
-			let value = split.next().ok_or(Error::OddElements)?;
-
-			inner.insert(key, value);
-		}
-
-		Ok(Self { inner })
-	}
-
 	pub fn base64(&self, key: u8) -> Result<String> {
 		decode::base64(self.str(key)?)
 	}
@@ -73,6 +59,20 @@ impl<'a> Map<'a> {
 
 	pub fn list(&self, key: u8, sep: char) -> Result<List<'a>> {
 		Ok(List::new(self.str(key)?, sep))
+	}
+
+	pub fn new(data: &'a str, sep: char) -> Result<Self> {
+		let mut inner = HashMap::new();
+		let mut split = data.split(sep);
+
+		while let Some(next) = split.next() {
+			let key = next.parse().map_err(Error::from)?;
+			let value = split.next().ok_or(Error::OddElements)?;
+
+			inner.insert(key, value);
+		}
+
+		Ok(Self { inner })
 	}
 
 	pub fn str(&self, key: u8) -> Result<&'a str> {

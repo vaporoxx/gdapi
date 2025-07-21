@@ -20,7 +20,7 @@ pub struct DeleteAccountCommentForm<'a> {
 	target_account_id: AccountId,
 }
 
-pub const fn delete_account_comment(auth: &Auth, id: CommentId) -> DeleteAccountCommentForm {
+pub const fn delete_account_comment(auth: &Auth, id: CommentId) -> DeleteAccountCommentForm<'_> {
 	DeleteAccountCommentForm {
 		account_id: auth.account_id,
 		comment_id: id,
@@ -78,7 +78,7 @@ pub struct LevelsForm<'a> {
 	str: &'a str,
 }
 
-pub const fn levels(query: &str) -> LevelsForm {
+pub const fn levels(query: &str) -> LevelsForm<'_> {
 	LevelsForm {
 		kind: 10,
 		secret: secrets::COMMON,
@@ -123,7 +123,7 @@ pub struct SearchUserForm<'a> {
 	str: &'a str,
 }
 
-pub const fn search_user(query: &str) -> SearchUserForm {
+pub const fn search_user(query: &str) -> SearchUserForm<'_> {
 	SearchUserForm {
 		secret: secrets::COMMON,
 		str: query,
