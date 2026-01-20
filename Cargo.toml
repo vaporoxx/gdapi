@@ -1,21 +1,20 @@
 [package]
 name = "gdapi"
 version = "0.1.0"
-authors = ["vaporoxx"]
 edition = "2024"
-description = "A wrapper around the Geometry Dash API"
-repository = "https://github.com/vaporoxx/gdapi"
-license = "ISC"
 
 [dependencies]
-base64 = "0.22"
-reqwest = "0.12"
-sha1 = "0.10"
+base64 = "0.22.1"
+sha1 = "0.10.6"
+
+[dependencies.reqwest]
+version = "0.13.1"
+features = ["form"]
 
 [dependencies.serde]
-version = "1"
+version = "1.0.228"
 features = ["derive"]
 
 [dev-dependencies.tokio]
-version = "1"
+version = "1.49.0"
 features = ["macros", "rt-multi-thread"]
