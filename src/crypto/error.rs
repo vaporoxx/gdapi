@@ -7,11 +7,11 @@ use base64::DecodeError;
 /// The error type for all cryptographic actions.
 #[derive(Debug)]
 pub enum Error {
-	/// A wrapper around a [`DecodeError`]
+	/// A wrapper around a [`DecodeError`].
 	Decode(DecodeError),
-	/// A wrapper around a [`FromUtf8Error`]
+	/// A wrapper around a [`FromUtf8Error`].
 	FromUtf8(FromUtf8Error),
-	/// A wrapper around a [`ParseIntError`]
+	/// A wrapper around a [`ParseIntError`].
 	ParseInt(ParseIntError),
 }
 

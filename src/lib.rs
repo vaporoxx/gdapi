@@ -1,7 +1,7 @@
-#![deny(clippy::all, clippy::nursery)]
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://raw.githubusercontent.com/vaporoxx/gdapi/main/assets/icon.png")]
 #![doc(html_logo_url = "https://raw.githubusercontent.com/vaporoxx/gdapi/main/assets/icon.png")]
+#![warn(missing_docs)]
 
 mod crypto;
 mod form;

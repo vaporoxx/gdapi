@@ -5,75 +5,97 @@ use crate::model::id::{AccountId, LevelId, UserId};
 /// Represents the copyability of a level.
 #[derive(Clone, Copy, Debug)]
 pub enum Copyability {
+	/// The level is not copyable.
 	None,
+	/// The level can be copied without a password.
 	Free,
+	/// The level can be copied with the given password.
 	Password(u32),
 }
 
 /// Represents the creator of a level.
 #[derive(Clone, Debug)]
 pub struct Creator {
-	/// The account id of the creator
+	/// The account id of the creator.
 	pub account_id: AccountId,
-	/// The user id of the creator
+	/// The user id of the creator.
 	pub user_id: UserId,
-	/// The username of the creator
+	/// The username of the creator.
 	pub username: String,
 }
 
 /// Represents the specific demon difficulty of a level.
 #[derive(Clone, Copy, Debug)]
 pub enum Demon {
+	/// An easy demon.
 	Easy,
+	/// A medium demon.
 	Medium,
+	/// A hard demon.
 	Hard,
+	/// An insane demon.
 	Insane,
+	/// An extreme demon.
 	Extreme,
 }
 
 /// Represents the difficulty of a level.
 #[derive(Clone, Copy, Debug)]
 pub enum Difficulty {
+	/// An unrated level.
 	Unrated,
+	/// An automatic level.
 	Auto,
+	/// An easy level.
 	Easy,
+	/// A normal level.
 	Normal,
+	/// A hard level.
 	Hard,
+	/// A harder level.
 	Harder,
+	/// An insane level.
 	Insane,
+	/// A demon level.
 	Demon(Demon),
 }
 
 /// Represents a level.
 #[derive(Clone, Debug)]
 pub struct Level {
-	/// The copyability of the level
+	/// The copyability of the level.
 	pub copyability: Option<Copyability>,
-	/// The creator of the level
+	/// The creator of the level.
 	pub creator: Option<Creator>,
-	/// The user id of the level creator
+	/// The user id of the level creator.
 	pub creator_id: UserId,
-	/// The description of the level
+	/// The description of the level.
 	pub description: String,
-	/// The difficulty of the level
+	/// The difficulty of the level.
 	pub difficulty: Difficulty,
-	/// The id of the level
+	/// The id of the level.
 	pub level_id: LevelId,
-	/// The name of the level
+	/// The name of the level.
 	pub name: String,
-	/// The rating of the level
+	/// The rating of the level.
 	pub rating: Rating,
-	/// The stars of the level
+	/// The stars of the level.
 	pub stars: u8,
 }
 
 /// Represents the rating of a level.
 #[derive(Clone, Copy, Debug)]
 pub enum Rating {
+	/// An unrated level.
 	None,
+	/// A rated level.
 	Rated,
+	/// A featured level.
 	Featured,
+	/// An epic level.
 	Epic,
+	/// A legendary level.
 	Legendary,
+	/// A mythic level.
 	Mythic,
 }

@@ -4,15 +4,15 @@ use std::{error, fmt};
 /// The error type for all parsing actions.
 #[derive(Debug)]
 pub enum Error {
-	/// An enum value is out of range
+	/// An enum value is out of range.
 	InvalidEnumValue(u8),
-	/// A required key is not present
+	/// A required key is not present.
 	InvalidKey(u8),
-	/// An array string has an invalid length
+	/// An array string has an invalid length.
 	InvalidLength,
-	/// A key-value string has an odd length
+	/// A key-value string has an odd length.
 	OddElements,
-	/// A wrapper around a [`ParseIntError`]
+	/// A wrapper around a [`ParseIntError`].
 	ParseInt(ParseIntError),
 }
 

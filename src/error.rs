@@ -10,17 +10,17 @@ pub use crate::parser::error::Error as ParserError;
 /// The error type used across the library.
 #[derive(Debug)]
 pub enum Error {
-	/// The client is already logged in
+	/// The client is already logged in.
 	AlreadyLoggedIn,
-	/// A wrapper around a [`CryptoError`]
+	/// A wrapper around a [`CryptoError`].
 	Crypto(CryptoError),
-	/// The server rejected the request
+	/// The server rejected the request.
 	InvalidRequest(i8),
-	/// The client needs to be logged in
+	/// The client needs to be logged in.
 	NotLoggedIn,
-	/// A wrapper around a [`ParserError`]
+	/// A wrapper around a [`ParserError`].
 	Parser(ParserError),
-	/// A wrapper around a [`ReqwestError`]
+	/// A wrapper around a [`ReqwestError`].
 	Reqwest(ReqwestError),
 }
 
