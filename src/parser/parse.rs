@@ -154,11 +154,25 @@ impl Parse for User {
 		let map = Map::new(data, ':')?;
 
 		let account_id = map.int(16)?;
+		let creator_points = map.int(8)?;
+		let demons = map.int(4)?;
+		let diamonds = map.int(46)?;
+		let moons = map.int(52)?;
+		let secret_coins = map.int(13)?;
+		let stars = map.int(3)?;
+		let user_coins = map.int(17)?;
 		let user_id = map.int(2)?;
 		let username = map.string(1)?;
 
 		Ok(Self {
 			account_id,
+			creator_points,
+			demons,
+			diamonds,
+			moons,
+			secret_coins,
+			stars,
+			user_coins,
 			user_id,
 			username,
 		})
