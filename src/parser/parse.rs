@@ -1,10 +1,9 @@
 use crate::crypto::decode;
-use crate::error::Result;
+use crate::error::{Error, ParseError, Result};
 use crate::model::gauntlet::Gauntlet;
 use crate::model::level::{Copyability, Creator, Demon, Difficulty, Level, Rating};
 use crate::model::map_pack::MapPack;
 use crate::model::user::{LoginUser, User};
-use crate::parser::error::Error;
 use crate::parser::util::{List, Map};
 
 pub trait Parse: Sized {
@@ -19,7 +18,7 @@ impl Parse for () {
 
 impl Parse for u32 {
 	fn parse(data: &str, _: Option<&str>) -> Result<Self> {
-		Ok(data.parse().map_err(Error::from)?)
+		data.parse().map_err(Error::from)
 	}
 }
 
@@ -27,8 +26,8 @@ impl Parse for Creator {
 	fn parse(data: &str, _: Option<&str>) -> Result<Self> {
 		let [user_id, username, account_id] = List::new(data, ':').strs()?;
 
-		let account_id = account_id.parse().map_err(Error::from)?;
-		let user_id = user_id.parse().map_err(Error::from)?;
+		let account_id = account_id.parse()?;
+		let user_id = user_id.parse()?;
 		let username = username.into();
 
 		Ok(Self {
@@ -83,7 +82,7 @@ impl Parse for Level {
 				4 => Difficulty::Demon(Demon::Medium),
 				5 => Difficulty::Demon(Demon::Insane),
 				6 => Difficulty::Demon(Demon::Extreme),
-				_ => return Err(Error::InvalidEnumValue(43))?,
+				_ => return Err(ParseError::InvalidEnumValue(43).into()),
 			}
 		} else {
 			match map.int(9)? {
@@ -93,7 +92,7 @@ impl Parse for Level {
 				30 => Difficulty::Hard,
 				40 => Difficulty::Harder,
 				50 => Difficulty::Insane,
-				_ => return Err(Error::InvalidEnumValue(9))?,
+				_ => return Err(ParseError::InvalidEnumValue(9).into()),
 			}
 		};
 
@@ -107,7 +106,7 @@ impl Parse for Level {
 				1 => Rating::Epic,
 				2 => Rating::Legendary,
 				3 => Rating::Mythic,
-				_ => return Err(Error::InvalidEnumValue(42))?,
+				_ => return Err(ParseError::InvalidEnumValue(42).into()),
 			}
 		};
 

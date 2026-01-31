@@ -3,7 +3,7 @@ use std::sync::OnceLock;
 use reqwest::Client;
 use serde::Serialize;
 
-use crate::error::{Error, Result};
+use crate::error::{RequestError, Result};
 use crate::model::id::AccountId;
 use crate::parser::parse::Parse;
 
@@ -51,11 +51,13 @@ impl Http {
 	const API_BASE: &str = "https://www.boomlings.com/database";
 
 	pub fn auth(&self) -> Result<&Auth> {
-		self.auth.get().ok_or(Error::NotLoggedIn)
+		self.auth.get().ok_or_else(|| RequestError::NotLoggedIn.into())
 	}
 
 	pub fn authenticate(&self, account_id: AccountId, gjp2: String) -> Result<()> {
-		self.auth.set(Auth { account_id, gjp2 }).or(Err(Error::AlreadyLoggedIn))
+		self.auth
+			.set(Auth { account_id, gjp2 })
+			.map_err(|_| RequestError::AlreadyLoggedIn.into())
 	}
 
 	pub async fn post<T: Parse>(&self, endpoint: Endpoint, form: impl Serialize) -> Result<T> {
@@ -64,8 +66,8 @@ impl Http {
 		let response = self.client.post(url).form(&form).send().await?;
 		let data = response.error_for_status()?.text().await?;
 
-		if data.starts_with('-') {
-			return Err(Error::InvalidRequest(data.parse().unwrap_or_default()));
+		if let Ok(code) = data.parse() {
+			return Err(RequestError::InvalidRequest(code).into());
 		}
 
 		if let Some((data, remaining)) = data.split_once('#') {

@@ -13,5 +13,5 @@ git = "https://github.com/vaporoxx/gdapi"
 
 ## References
 
-* Documentation: <https://vaporoxx.github.io/gdapi/gdapi>
-* Examples: <https://github.com/vaporoxx/gdapi/tree/main/examples>
+- Documentation: <https://vaporoxx.github.io/gdapi/gdapi>
+- Examples: <https://github.com/vaporoxx/gdapi/tree/main/examples>

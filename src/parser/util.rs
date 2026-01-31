@@ -3,8 +3,7 @@ use std::num::ParseIntError;
 use std::str::{FromStr, Split};
 
 use crate::crypto::decode;
-use crate::error::Result;
-use crate::parser::error::Error;
+use crate::error::{Error, ParseError, Result};
 use crate::parser::parse::Parse;
 
 pub struct List<'a> {
@@ -15,9 +14,9 @@ impl<'a> List<'a> {
 	pub fn ints<T: FromStr<Err = ParseIntError>, const N: usize>(self) -> Result<[T; N]> {
 		self.inner
 			.map(|value| value.parse().map_err(Error::from))
-			.collect::<Result<Vec<_>, _>>()?
+			.collect::<Result<Vec<_>>>()?
 			.try_into()
-			.or(Err(Error::InvalidLength.into()))
+			.map_err(|_| ParseError::InvalidLength.into())
 	}
 
 	pub fn new(data: &'a str, sep: char) -> Self {
@@ -25,14 +24,14 @@ impl<'a> List<'a> {
 	}
 
 	pub fn next(&mut self) -> Result<&'a str> {
-		Ok(self.inner.next().ok_or(Error::InvalidLength)?)
+		self.inner.next().ok_or_else(|| ParseError::InvalidLength.into())
 	}
 
 	pub fn strs<const N: usize>(self) -> Result<[&'a str; N]> {
 		self.inner
 			.collect::<Vec<_>>()
 			.try_into()
-			.or(Err(Error::InvalidLength.into()))
+			.map_err(|_| ParseError::InvalidLength.into())
 	}
 
 	pub fn vec<T: Parse>(self) -> Result<Vec<T>> {
@@ -46,19 +45,19 @@ pub struct Map<'a> {
 
 impl<'a> Map<'a> {
 	pub fn base64(&self, key: u8) -> Result<String> {
-		decode::base64(self.str(key)?)
+		self.str(key).and_then(decode::base64)
 	}
 
 	pub fn bool(&self, key: u8) -> Result<bool> {
-		Ok(!self.str(key)?.is_empty())
+		self.str(key).map(|data| !data.is_empty())
 	}
 
 	pub fn int<T: FromStr<Err = ParseIntError>>(&self, key: u8) -> Result<T> {
-		Ok(self.str(key)?.parse().map_err(Error::from)?)
+		self.str(key).and_then(|data| data.parse().map_err(Error::from))
 	}
 
 	pub fn list(&self, key: u8, sep: char) -> Result<List<'a>> {
-		Ok(List::new(self.str(key)?, sep))
+		self.str(key).map(|data| List::new(data, sep))
 	}
 
 	pub fn new(data: &'a str, sep: char) -> Result<Self> {
@@ -66,8 +65,8 @@ impl<'a> Map<'a> {
 		let mut split = data.split(sep);
 
 		while let Some(next) = split.next() {
-			let key = next.parse().map_err(Error::from)?;
-			let value = split.next().ok_or(Error::OddElements)?;
+			let key = next.parse()?;
+			let value = split.next().ok_or(ParseError::OddElements)?;
 
 			inner.insert(key, value);
 		}
@@ -76,10 +75,13 @@ impl<'a> Map<'a> {
 	}
 
 	pub fn str(&self, key: u8) -> Result<&'a str> {
-		Ok(self.inner.get(&key).copied().ok_or(Error::InvalidKey(key))?)
+		self.inner
+			.get(&key)
+			.copied()
+			.ok_or_else(|| ParseError::InvalidKey(key).into())
 	}
 
 	pub fn string(&self, key: u8) -> Result<String> {
-		Ok(self.str(key)?.into())
+		self.str(key).map(String::from)
 	}
 }

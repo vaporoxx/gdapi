@@ -1,4 +1,4 @@
-use base64::prelude::*;
+use base64::prelude::{BASE64_URL_SAFE, Engine};
 use sha1::{Digest, Sha1};
 
 pub fn base64(input: &str) -> String {
